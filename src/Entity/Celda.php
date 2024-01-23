@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use App\Repository\CeldaRepository;
 use App\Repository\PanalRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CeldaRepository::class)]
@@ -18,8 +19,12 @@ class Celda
     #[ORM\Column(length: 20)]
     private ?string $celda = null;
 
+    #[ORM\Column(type: "integer", nullable: true)]
+    private $panalId;
+
     #[ORM\ManyToOne(targetEntity: Panal::class, inversedBy: 'celdas')]
-    private Category $panal;
+    #[ORM\JoinColumn(name: "panal_id", referencedColumnName: "id")]
+    private $panal;
 
     #[ORM\OneToMany(targetEntity: Usuario::class, mappedBy: 'celda')]
     private Collection $usuarios;
@@ -57,22 +62,6 @@ class Celda
     }
 
     /**
-     * @return Category
-     */
-    public function getPanal(): Category
-    {
-        return $this->panal;
-    }
-
-    /**
-     * @param Category $panal
-     */
-    public function setPanal(Category $panal): void
-    {
-        $this->panal = $panal;
-    }
-
-    /**
      * @return Collection
      */
     public function getUsuarios(): Collection
@@ -86,6 +75,38 @@ class Celda
     public function setUsuarios(Collection $usuarios): void
     {
         $this->usuarios = $usuarios;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPanalId()
+    {
+        return $this->panalId;
+    }
+
+    /**
+     * @param mixed $panalId
+     */
+    public function setPanalId($panalId): void
+    {
+        $this->panalId = $panalId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPanal()
+    {
+        return $this->panal;
+    }
+
+    /**
+     * @param mixed $panal
+     */
+    public function setPanal($panal): void
+    {
+        $this->panal = $panal;
     }
 
 

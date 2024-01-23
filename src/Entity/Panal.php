@@ -4,6 +4,7 @@
 namespace App\Entity;
 
 use App\Repository\PanalRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PanalRepository::class)]
@@ -22,6 +23,13 @@ class Panal
 
     #[ORM\Column(length: 300)]
     private ?string $direccion = null;
+
+    #[ORM\Column(type: "integer", nullable: true)]
+    private $ciudadId;
+
+    #[ORM\ManyToOne(targetEntity: Ciudad::class, inversedBy: 'panales')]
+    #[ORM\JoinColumn(name: "ciudad_id", referencedColumnName: "id")]
+    private $ciudad;
 
     #[ORM\OneToMany(targetEntity: Celda::class, mappedBy: 'panal')]
     private Collection $celdas;
@@ -123,6 +131,38 @@ class Panal
     public function setUsuarios(Collection $usuarios): void
     {
         $this->usuarios = $usuarios;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCiudadId()
+    {
+        return $this->ciudadId;
+    }
+
+    /**
+     * @param mixed $ciudadId
+     */
+    public function setCiudadId($ciudadId): void
+    {
+        $this->ciudadId = $ciudadId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCiudad()
+    {
+        return $this->ciudad;
+    }
+
+    /**
+     * @param mixed $ciudad
+     */
+    public function setCiudad($ciudad): void
+    {
+        $this->ciudad = $ciudad;
     }
 
 

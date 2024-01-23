@@ -15,4 +15,18 @@ class PanalRepository extends ServiceEntityRepository
         parent::__construct($registry, Panal::class);
     }
 
+    public function buscar($codigoCiudad = null) {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Panal::class, 'p')
+            ->select('p.id')
+            ->addSelect('p.nombre');
+        if($codigoCiudad) {
+            $queryBuilder->andWhere("p.ciudadId = {$codigoCiudad}");
+        }
+        $arPanales = $queryBuilder->getQuery()->getResult();
+        return [
+            'error' => false,
+            'respuesta' => $arPanales
+        ];
+    }
 }

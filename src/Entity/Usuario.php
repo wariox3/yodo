@@ -42,13 +42,20 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "integer", nullable: true)]
     private $celdaId;
 
+    #[ORM\Column(type: "integer", nullable: true)]
+    private $ciudadId;
+
     #[ORM\ManyToOne(targetEntity: Celda::class, inversedBy: 'usuarios')]
     #[ORM\JoinColumn(name: "celda_id", referencedColumnName: "id")]
-    private Category $celda;
+    private $celda;
 
     #[ORM\ManyToOne(targetEntity: Panal::class, inversedBy: 'usuarios')]
     #[ORM\JoinColumn(name: "panal_id", referencedColumnName: "id")]
-    private Category $panal;
+    private $panal;
+
+    #[ORM\ManyToOne(targetEntity: Ciudad::class, inversedBy: 'usuarios')]
+    #[ORM\JoinColumn(name: "ciudad_id", referencedColumnName: "id")]
+    private $ciudad;
 
     /**
      * @var string The hashed password
@@ -178,37 +185,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tokenFirebase = $tokenFirebase;
     }
 
-    /**
-     * @return Category
-     */
-    public function getCelda(): Category
-    {
-        return $this->celda;
-    }
-
-    /**
-     * @param Category $celda
-     */
-    public function setCelda(Category $celda): void
-    {
-        $this->celda = $celda;
-    }
-
-    /**
-     * @return Category
-     */
-    public function getPanal(): Category
-    {
-        return $this->panal;
-    }
-
-    /**
-     * @param Category $panal
-     */
-    public function setPanal(Category $panal): void
-    {
-        $this->panal = $panal;
-    }
 
     /**
      * @return mixed
@@ -241,6 +217,71 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->celdaId = $celdaId;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCiudadId()
+    {
+        return $this->ciudadId;
+    }
+
+    /**
+     * @param mixed $ciudadId
+     */
+    public function setCiudadId($ciudadId): void
+    {
+        $this->ciudadId = $ciudadId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCelda()
+    {
+        return $this->celda;
+    }
+
+    /**
+     * @param mixed $celda
+     */
+    public function setCelda($celda): void
+    {
+        $this->celda = $celda;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPanal()
+    {
+        return $this->panal;
+    }
+
+    /**
+     * @param mixed $panal
+     */
+    public function setPanal($panal): void
+    {
+        $this->panal = $panal;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCiudad()
+    {
+        return $this->ciudad;
+    }
+
+    /**
+     * @param mixed $ciudad
+     */
+    public function setCiudad($ciudad): void
+    {
+        $this->ciudad = $ciudad;
+    }
+
 
 
 }
