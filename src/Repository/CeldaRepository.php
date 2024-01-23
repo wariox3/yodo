@@ -17,7 +17,7 @@ class CeldaRepository extends ServiceEntityRepository
         parent::__construct($registry, Celda::class);
     }
 
-    public function asignar($codigoUsuario, $codigoPanal, $celda, $llave)
+    public function vincular($codigoUsuario, $codigoPanal, $celda, $llave)
     {
         $em = $this->getEntityManager();
         $arUsuario = $em->getRepository(Usuario::class)->find($codigoUsuario);
@@ -82,6 +82,33 @@ class CeldaRepository extends ServiceEntityRepository
                 ];
             }
 
+        } else {
+            return [
+                'error' => true,
+                'errorMensaje' => "El usuario no existe"
+            ];
+        }
+    }
+
+    public function desvincular($codigoUsuario)
+    {
+        $em = $this->getEntityManager();
+        $arUsuario = $em->getRepository(Usuario::class)->find($codigoUsuario);
+        if ($arUsuario) {
+            if ($arUsuario->getCelda()) {
+                $arCeldaUsuarios = $em->getRepository(CeldaUsuario::class)->findBy(['celdaId' => $arUsuario->getCeldaId(), 'usuarioId' => $codigoUsuario]);
+                foreach ($arCeldaUsuarios as $arCeldaUsuario) {
+                    $em->remove($arCeldaUsuario);
+                }
+            }
+            $arUsuario->setCelda(null);
+            $arUsuario->setPanal(null);
+            $em->persist($arUsuario);
+            $em->flush();
+            return [
+                'error' => false,
+                'respuesta' => 'Desvinculado de la celda y el panal con exito'
+            ];
         } else {
             return [
                 'error' => true,

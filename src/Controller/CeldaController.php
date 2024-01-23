@@ -27,15 +27,31 @@ class CeldaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/celda/asignar', name: 'api_celda_asignar')]
-    public function asignar(Request $request, EntityManagerInterface $em) {
+    #[Route('/api/celda/vincular', name: 'api_celda_vincular')]
+    public function vincular(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;
         $codigoPanal = $raw['codigoPanal']?? null;
         $celda = $raw['celda']?? null;
         $llave = $raw['llave']?? null;
         if($codigoUsuario && $codigoPanal && $celda && $llave) {
-            $arrRespuesta = $em->getRepository(Celda::class)->asignar($codigoUsuario, $codigoPanal, $celda, $llave);
+            $arrRespuesta = $em->getRepository(Celda::class)->vincular($codigoUsuario, $codigoPanal, $celda, $llave);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
+
+    #[Route('/api/celda/desvincular', name: 'api_celda_desvincular')]
+    public function desvincular(Request $request, EntityManagerInterface $em) {
+        $raw = json_decode($request->getContent(), true);
+        $codigoUsuario = $raw['codigoUsuario']?? null;
+        if($codigoUsuario) {
+            $arrRespuesta = $em->getRepository(Celda::class)->desvincular($codigoUsuario);
             if(!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
             } else {
