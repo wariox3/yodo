@@ -51,6 +51,12 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
             ->addSelect('u.username')
             ->addSelect('u.celular')
             ->addSelect('u.tokenFirebase')
+            ->addSelect('u.celdaId')
+            ->addSelect('u.panalId')
+            ->addSelect('c.celda as celdaCelda')
+            ->addSelect('p.nombre as panalNombre')
+            ->leftJoin('u.celda', 'c')
+            ->leftJoin('u.panal', 'p')
             ->where("u.id = {$codigoUsuario}");
         $arUsuario = $queryBuilder->getQuery()->getOneOrNullResult();
         return $arUsuario;

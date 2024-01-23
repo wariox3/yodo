@@ -36,6 +36,20 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 500, nullable: true)]
     private ?string $tokenFirebase = null;
 
+    #[ORM\Column(type: "integer", nullable: true)]
+    private $panalId;
+
+    #[ORM\Column(type: "integer", nullable: true)]
+    private $celdaId;
+
+    #[ORM\ManyToOne(targetEntity: Celda::class, inversedBy: 'usuarios')]
+    #[ORM\JoinColumn(name: "celda_id", referencedColumnName: "id")]
+    private Category $celda;
+
+    #[ORM\ManyToOne(targetEntity: Panal::class, inversedBy: 'usuarios')]
+    #[ORM\JoinColumn(name: "panal_id", referencedColumnName: "id")]
+    private Category $panal;
+
     /**
      * @var string The hashed password
      */
@@ -162,6 +176,70 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setTokenFirebase(?string $tokenFirebase): void
     {
         $this->tokenFirebase = $tokenFirebase;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getCelda(): Category
+    {
+        return $this->celda;
+    }
+
+    /**
+     * @param Category $celda
+     */
+    public function setCelda(Category $celda): void
+    {
+        $this->celda = $celda;
+    }
+
+    /**
+     * @return Category
+     */
+    public function getPanal(): Category
+    {
+        return $this->panal;
+    }
+
+    /**
+     * @param Category $panal
+     */
+    public function setPanal(Category $panal): void
+    {
+        $this->panal = $panal;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPanalId()
+    {
+        return $this->panalId;
+    }
+
+    /**
+     * @param mixed $panalId
+     */
+    public function setPanalId($panalId): void
+    {
+        $this->panalId = $panalId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCeldaId()
+    {
+        return $this->celdaId;
+    }
+
+    /**
+     * @param mixed $celdaId
+     */
+    public function setCeldaId($celdaId): void
+    {
+        $this->celdaId = $celdaId;
     }
 
 
