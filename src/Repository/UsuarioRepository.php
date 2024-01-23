@@ -8,6 +8,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
+use Symfony\Component\Validator\Constraints\Json;
 
 /**
  * @extends ServiceEntityRepository<Usuario>
@@ -40,28 +41,19 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
         $this->getEntityManager()->flush();
     }
 
-//    /**
-//     * @return Usuario[] Returns an array of Usuario objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('u.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
-//    public function findOneBySomeField($value): ?Usuario
-//    {
-//        return $this->createQueryBuilder('u')
-//            ->andWhere('u.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function detalle($codigoUsuario) {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Usuario::class, 'u')
+            ->select('u.id')
+            ->addSelect('u.nombreCorto')
+            ->addSelect('u.email')
+            ->addSelect('u.username')
+            ->addSelect('u.celular')
+            ->addSelect('u.tokenFirebase')
+            ->where("u.id = {$codigoUsuario}");
+        $arUsuario = $queryBuilder->getQuery()->getOneOrNullResult();
+        return $arUsuario;
+    }
+
 }

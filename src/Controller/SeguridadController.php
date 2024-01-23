@@ -17,14 +17,19 @@ class SeguridadController extends AbstractFOSRestController
         $raw = json_decode($request->getContent(), true);
         $email = $raw['email'] ?? null;
         $password = $raw['password'] ?? null;
-        if($email && $password) {
+        $celular = $raw['celular'] ?? null;
+        if($email && $password && $celular) {
             $arUsuario = $em->getRepository(Usuario::class)->findOneBy(['username' => $email]);
             if($arUsuario == null) {
+                $usuarioSeparado = explode('@', $email);
                 $arUsuario = new Usuario();
                 $hashedPassword = $passwordHasher->hashPassword($arUsuario, $password);
                 $arUsuario->setPassword($hashedPassword);
                 $arUsuario->setEmail($email);
                 $arUsuario->setUsername($email);
+                $arUsuario->setNombreCorto($usuarioSeparado[0]);
+                $arUsuario->setCelular($celular);
+                $arUsuario->setImagenPerfil('yodo/perfil/general.png');
                 $em->persist($arUsuario);
                 $em->flush();
                 return $this->view(['id' => $arUsuario->getId()], 200);

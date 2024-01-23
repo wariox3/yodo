@@ -24,6 +24,18 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private array $roles = [];
 
+    #[ORM\Column(length: 180, nullable: true)]
+    private ?string $nombreCorto = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $celular = null;
+
+    #[ORM\Column(length: 250, nullable: true)]
+    private ?string $imagenPerfil = null;
+
+    #[ORM\Column(length: 500, nullable: true)]
+    private ?string $tokenFirebase = null;
+
     /**
      * @var string The hashed password
      */
@@ -111,4 +123,46 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
     }
+
+    public function getNombreCorto(): ?string
+    {
+        return $this->nombreCorto;
+    }
+
+    public function setNombreCorto(?string $nombreCorto): void
+    {
+        $this->nombreCorto = $nombreCorto;
+    }
+
+    public function getCelular(): ?string
+    {
+        return $this->celular;
+    }
+
+    public function setCelular(?string $celular): void
+    {
+        $this->celular = $celular;
+    }
+
+    public function getImagenPerfil(): ?string
+    {
+        return $this->imagenPerfil;
+    }
+
+    public function setImagenPerfil(?string $imagenPerfil): void
+    {
+        $this->imagenPerfil = $imagenPerfil;
+    }
+
+    public function getTokenFirebase(): ?string
+    {
+        return $this->tokenFirebase;
+    }
+
+    public function setTokenFirebase(?string $tokenFirebase): void
+    {
+        $this->tokenFirebase = $tokenFirebase;
+    }
+
+
 }
