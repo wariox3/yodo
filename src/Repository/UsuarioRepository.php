@@ -62,51 +62,5 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
         return $arUsuario;
     }
 
-    public function asignarPanal($codigoUsuario, $codigoPanal, $codigoCiudad) {
-        $em = $this->getEntityManager();
-        $arUsuario = $em->getRepository(Usuario::class)->find($codigoUsuario);
-        if ($arUsuario) {
-            if ($arUsuario->getPanal() == null) {
-                $arCiudad = $em->getRepository(Ciudad::class)->find($codigoCiudad);
-                if ($arCiudad) {
-                    $arPanal = $em->getRepository(Panal::class)->find($codigoPanal);
-                    if ($arPanal) {
-                        $arUsuario->setPanal($arPanal);
-                        $arUsuario->setCiudad($arCiudad);
-                        $em->persist($arUsuario);
-                        $em->flush();
-                        return [
-                            'error' => false,
-                            'respuesta' => [
-                                'panal' => $arPanal->getId(),
-                                'ciudad' => $arCiudad->getId(),
-                                'oferta' => false,
-                                'tienda' => false
-                            ]
-                        ];
-                    } else {
-                        return [
-                            'error' => true,
-                            'errorMensaje' => "El panal no existe"
-                        ];
-                    }
-                } else {
-                    return [
-                        'error' => true,
-                        'errorMensaje' => "La ciudad no existe"
-                    ];
-                }
-            } else {
-                return [
-                    'error' => true,
-                    'errorMensaje' => "El usuario ya tiene un panal asignado, debe desvincularse de este panal para seleccionar uno nuevo"
-                ];
-            }
-        } else {
-            return [
-                'error' => true,
-                'errorMensaje' => "El usuario no existe"
-            ];
-        }
-    }
+
 }

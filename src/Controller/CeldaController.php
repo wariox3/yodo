@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Celda;
 use App\Entity\Ciudad;
 use App\Entity\Panal;
 use App\Entity\Usuario;
@@ -10,9 +11,9 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PanalController extends AbstractFOSRestController
+class CeldaController extends AbstractFOSRestController
 {
-    #[Route('/api/panal/buscar', name: 'api_panal_buscar')]
+    #[Route('/api/panal/buscar', name: 'api_celda_buscar')]
     public function buscar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoCiudad = $raw['codigoCiudad']?? null;
@@ -26,14 +27,15 @@ class PanalController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/panal/asignar', name: 'api_panal_asignar')]
+    #[Route('/api/celda/asignar', name: 'api_celda_asignar')]
     public function asignar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;
         $codigoPanal = $raw['codigoPanal']?? null;
-        $codigoCiudad = $raw['codigoCiudad']?? null;
-        if($codigoUsuario && $codigoPanal && $codigoCiudad) {
-            $arrRespuesta = $em->getRepository(Panal::class)->asignar($codigoUsuario, $codigoPanal, $codigoCiudad);
+        $celda = $raw['celda']?? null;
+        $llave = $raw['llave']?? null;
+        if($codigoUsuario && $codigoPanal && $celda && $llave) {
+            $arrRespuesta = $em->getRepository(Celda::class)->asignar($codigoUsuario, $codigoPanal, $celda, $llave);
             if(!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
             } else {

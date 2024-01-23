@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UsuarioRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -56,6 +57,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToOne(targetEntity: Ciudad::class, inversedBy: 'usuarios')]
     #[ORM\JoinColumn(name: "ciudad_id", referencedColumnName: "id")]
     private $ciudad;
+
+    #[ORM\OneToMany(targetEntity: CeldaUsuario::class, mappedBy: 'usuario')]
+    private Collection $celdasUsuarios;
 
     /**
      * @var string The hashed password
@@ -280,6 +284,22 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCiudad($ciudad): void
     {
         $this->ciudad = $ciudad;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCeldasUsuarios(): Collection
+    {
+        return $this->celdasUsuarios;
+    }
+
+    /**
+     * @param Collection $celdasUsuarios
+     */
+    public function setCeldasUsuarios(Collection $celdasUsuarios): void
+    {
+        $this->celdasUsuarios = $celdasUsuarios;
     }
 
 

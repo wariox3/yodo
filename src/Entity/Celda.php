@@ -19,6 +19,18 @@ class Celda
     #[ORM\Column(length: 20)]
     private ?string $celda = null;
 
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $responsable = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $celular = null;
+
+    #[ORM\Column(length: 150, nullable: true)]
+    private ?string $correo = null;
+
+    #[ORM\Column(length: 200, nullable: true)]
+    private ?string $llave = null;
+
     #[ORM\Column(type: "integer", nullable: true)]
     private $panalId;
 
@@ -28,6 +40,9 @@ class Celda
 
     #[ORM\OneToMany(targetEntity: Usuario::class, mappedBy: 'celda')]
     private Collection $usuarios;
+
+    #[ORM\OneToMany(targetEntity: CeldaUsuario::class, mappedBy: 'celda')]
+    private Collection $celdasUsuarios;
 
     /**
      * @return int|null
@@ -107,6 +122,86 @@ class Celda
     public function setPanal($panal): void
     {
         $this->panal = $panal;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCeldasUsuarios(): Collection
+    {
+        return $this->celdasUsuarios;
+    }
+
+    /**
+     * @param Collection $celdasUsuarios
+     */
+    public function setCeldasUsuarios(Collection $celdasUsuarios): void
+    {
+        $this->celdasUsuarios = $celdasUsuarios;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getResponsable(): ?string
+    {
+        return $this->responsable;
+    }
+
+    /**
+     * @param string|null $responsable
+     */
+    public function setResponsable(?string $responsable): void
+    {
+        $this->responsable = $responsable;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCelular(): ?string
+    {
+        return $this->celular;
+    }
+
+    /**
+     * @param string|null $celular
+     */
+    public function setCelular(?string $celular): void
+    {
+        $this->celular = $celular;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCorreo(): ?string
+    {
+        return $this->correo;
+    }
+
+    /**
+     * @param string|null $correo
+     */
+    public function setCorreo(?string $correo): void
+    {
+        $this->correo = $correo;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLlave(): ?string
+    {
+        return $this->llave;
+    }
+
+    /**
+     * @param string|null $llave
+     */
+    public function setLlave(?string $llave): void
+    {
+        $this->llave = $llave;
     }
 
 
