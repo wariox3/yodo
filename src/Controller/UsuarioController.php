@@ -18,10 +18,7 @@ class UsuarioController extends AbstractFOSRestController
             $usuario = $em->getRepository(Usuario::class)->detalle($codigoUsuario);
             return $this->view(['usuario' => $usuario], 200);
         } else {
-            return $this->view([
-                'tipo' => 'error',
-                'errorMensaje' => 'Faltan datos para el consumo de la API',
-            ], 400);
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
         }
     }
 }

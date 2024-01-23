@@ -34,16 +34,10 @@ class SeguridadController extends AbstractFOSRestController
                 $em->flush();
                 return $this->view(['id' => $arUsuario->getId()], 200);
             } else {
-                return $this->view([
-                    'tipo' => 'error',
-                    'errorMensaje' => 'El usuario ya existe',
-                ], 400);
+                return $this->view(['mensaje' => 'El usuario ya existe'], 400);
             }
         } else {
-            return $this->view([
-                'tipo' => 'error',
-                'errorMensaje' => 'Faltan datos para el consumo de la API',
-            ], 400);
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
         }
     }
 }
