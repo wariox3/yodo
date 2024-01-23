@@ -42,7 +42,7 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
     }
 
 
-    public function detalle($codigoUsuario) {
+    public function detalle($usuario) {
         $em = $this->getEntityManager();
         $queryBuilder = $em->createQueryBuilder()->from(Usuario::class, 'u')
             ->select('u.id')
@@ -57,7 +57,7 @@ class UsuarioRepository extends ServiceEntityRepository implements PasswordUpgra
             ->addSelect('p.nombre as panalNombre')
             ->leftJoin('u.celda', 'c')
             ->leftJoin('u.panal', 'p')
-            ->where("u.id = {$codigoUsuario}");
+            ->where("u.username = '{$usuario}'");
         $arUsuario = $queryBuilder->getQuery()->getOneOrNullResult();
         return $arUsuario;
     }
