@@ -44,6 +44,12 @@ class Celda
     #[ORM\OneToMany(targetEntity: CeldaUsuario::class, mappedBy: 'celda')]
     private Collection $celdasUsuarios;
 
+    #[ORM\OneToMany(targetEntity: Entrega::class, mappedBy: 'celda')]
+    private Collection $entregas;
+
+    #[ORM\OneToMany(targetEntity: Visita::class, mappedBy: 'celda')]
+    private Collection $visitas;
+
     /**
      * @return int|null
      */
@@ -202,6 +208,26 @@ class Celda
     public function setLlave(?string $llave): void
     {
         $this->llave = $llave;
+    }
+
+    public function getEntregas(): Collection
+    {
+        return $this->entregas;
+    }
+
+    public function setEntregas(Collection $entregas): void
+    {
+        $this->entregas = $entregas;
+    }
+
+    public function getVisitas(): Collection
+    {
+        return $this->visitas;
+    }
+
+    public function setVisitas(Collection $visitas): void
+    {
+        $this->visitas = $visitas;
     }
 
 
