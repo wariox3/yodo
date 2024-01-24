@@ -61,6 +61,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: CeldaUsuario::class, mappedBy: 'usuario')]
     private Collection $celdasUsuarios;
 
+    #[ORM\OneToMany(targetEntity: Publicacion::class, mappedBy: 'usuario')]
+    private Collection $publicaciones;
+
     /**
      * @var string The hashed password
      */
@@ -300,6 +303,22 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCeldasUsuarios(Collection $celdasUsuarios): void
     {
         $this->celdasUsuarios = $celdasUsuarios;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPublicaciones(): Collection
+    {
+        return $this->publicaciones;
+    }
+
+    /**
+     * @param Collection $publicaciones
+     */
+    public function setPublicaciones(Collection $publicaciones): void
+    {
+        $this->publicaciones = $publicaciones;
     }
 
 

@@ -27,6 +27,24 @@ class CeldaController extends AbstractFOSRestController
         }
     }
 
+    #[Route('/api/celda/llave', name: 'api_celda_llave')]
+    public function llave(Request $request, EntityManagerInterface $em) {
+        $raw = json_decode($request->getContent(), true);
+        $codigoUsuario = $raw['codigoUsuario']?? null;
+        $codigoPanal = $raw['codigoPanal']?? null;
+        $celda = $raw['celda']?? null;
+        if($codigoUsuario && $codigoPanal && $celda) {
+            $arrRespuesta = $em->getRepository(Celda::class)->llave($codigoUsuario, $codigoPanal, $celda);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
+
     #[Route('/api/celda/vincular', name: 'api_celda_vincular')]
     public function vincular(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);

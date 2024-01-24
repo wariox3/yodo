@@ -17,6 +17,61 @@ class CeldaRepository extends ServiceEntityRepository
         parent::__construct($registry, Celda::class);
     }
 
+    public function llave($codigoUsuario, $codigoPanal, $celda)
+    {
+        $em = $this->getEntityManager();
+        $arUsuario = $em->getRepository(Usuario::class)->find($codigoUsuario);
+        if ($arUsuario) {
+            if(!$arUsuario->getCelda()) {
+                $arCelda = $em->getRepository(Celda::class)->findOneBy(['panalId' => $codigoPanal, 'celda' => $celda]);
+                if ($arCelda) {
+                    if($arCelda->getCorreo()) {
+                        $arCeldaUsuario = $em->getRepository(CeldaUsuario::class)->findOneBy(['celdaId' => $arCelda->getId(), 'usuarioId' => $arUsuario->getId()]);
+                        $llave = mt_rand(1000,9999);
+                        if(!$arCeldaUsuario) {
+                            $arCeldaUsuario = new CeldaUsuario();
+                            $arCeldaUsuario->setCelda($arCelda);
+                            $arCeldaUsuario->setUsuario($arUsuario);
+                        }
+                        $arCeldaUsuario->setLlave($llave);
+                        $em->persist($arCeldaUsuario);
+                        $em->flush();
+                        //$mensaje = "El usuario {$arUsuario->getUsuario()} genero un codigo para conectarse a la celda {$celda} debe proporcionarle este codigo para verificar su autorizacion: {$llave}";
+                        //$this->dubnio->enviarCorreo("Se ha generado el codigo {$llave} de validacion para Veeci", $mensaje, $arCelda->getCorreo());
+                        return [
+                            'error' => false,
+                            'respuesta' => [
+                                'correo' => $arCelda->getCorreo(),
+                                'llave' => $llave
+                            ]
+                        ];
+                    } else {
+                        return [
+                            'error' => true,
+                            'errorMensaje' => "La celda no tiene un correo electronico asignado, pruebe conectandose por QR"
+                        ];
+                    }
+                } else {
+                    return [
+                        'error' => true,
+                        'errorMensaje' => "La celda no existe"
+                    ];
+                }
+            } else {
+                return [
+                    'error' => true,
+                    'errorMensaje' => "El usuario ya tiene una celda asignada, debe desvincularse de este panal/celda para seleccionar uno nuevo"
+                ];
+            }
+
+        } else {
+            return [
+                'error' => true,
+                'errorMensaje' => "El usuario no existe"
+            ];
+        }
+    }
+
     public function vincular($codigoUsuario, $codigoPanal, $celda, $llave)
     {
         $em = $this->getEntityManager();
@@ -42,6 +97,7 @@ class CeldaRepository extends ServiceEntityRepository
                                 $arCeldaUsuario->setValidado(true);
                                 $em->persist($arCeldaUsuario);
                                 $arUsuario->setCelda($arCelda);
+                                $arUsuario->setPanal($arCelda->getPanal());
                                 $em->persist($arUsuario);
                                 $em->flush();
                                 return [
