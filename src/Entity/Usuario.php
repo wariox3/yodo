@@ -64,6 +64,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Publicacion::class, mappedBy: 'usuario')]
     private Collection $publicaciones;
 
+    #[ORM\OneToMany(targetEntity: Visita::class, mappedBy: 'usuarioAutoriza')]
+    private Collection $visitas;
+
     /**
      * @var string The hashed password
      */
@@ -319,6 +322,22 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPublicaciones(Collection $publicaciones): void
     {
         $this->publicaciones = $publicaciones;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getVisitas(): Collection
+    {
+        return $this->visitas;
+    }
+
+    /**
+     * @param Collection $visitas
+     */
+    public function setVisitas(Collection $visitas): void
+    {
+        $this->visitas = $visitas;
     }
 
 
