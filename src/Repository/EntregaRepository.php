@@ -119,7 +119,9 @@ class EntregaRepository extends ServiceEntityRepository
             ->addSelect('e.entregaTipoId')
             ->addSelect('e.descripcion')
             ->addSelect('c.celda')
+            ->addSelect('et.nombre as entregaTipoNombre')
             ->leftJoin('e.celda', 'c')
+            ->leftJoin('e.entregaTipo', 'et')
             ->where("c.panalId = {$codigoPanal}")
             ->andWhere("e.estadoEntregado = false")
             ->addOrderBy("e.fechaIngreso", "DESC");

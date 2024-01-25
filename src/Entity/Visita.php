@@ -5,9 +5,10 @@ namespace App\Entity;
 
 use App\Repository\CeldaUsuarioRepository;
 use App\Repository\EntregaRepository;
+use App\Repository\VisitaRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: EntregaRepository::class)]
+#[ORM\Entity(repositoryClass: VisitaRepository::class)]
 class Visita
 {
     #[ORM\Id]
@@ -39,11 +40,14 @@ class Visita
     #[ORM\Column(type:"string", length: 10, nullable: true)]
     private ?string $codigoIngreso;
 
-    #[ORM\Column(type:"string", length: 250)]
+    #[ORM\Column(type:"string", length: 250, nullable: true)]
     private ?string $urlImagenIngreso;
 
     #[ORM\Column(type: "boolean", options: ["default" => false])]
     private $estadoAutorizado = false;
+
+    #[ORM\Column(type: "boolean", options: ["default" => false])]
+    private $estadoCerrado = false;
 
     #[ORM\ManyToOne(targetEntity: Celda::class, inversedBy: 'visitas')]
     #[ORM\JoinColumn(name: "celda_id", referencedColumnName: "id")]
@@ -279,6 +283,16 @@ class Visita
     public function setUsuarioAutoriza($usuarioAutoriza): void
     {
         $this->usuarioAutoriza = $usuarioAutoriza;
+    }
+
+    public function isEstadoCerrado(): bool
+    {
+        return $this->estadoCerrado;
+    }
+
+    public function setEstadoCerrado(bool $estadoCerrado): void
+    {
+        $this->estadoCerrado = $estadoCerrado;
     }
 
 
