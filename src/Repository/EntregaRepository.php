@@ -28,6 +28,8 @@ class EntregaRepository extends ServiceEntityRepository
             ->addSelect('e.entregaTipoId')
             ->addSelect('e.estadoEntregado')
             ->addSelect("CONCAT('{$_ENV['ALMACENAMIENTO_URL']}', e.urlImagenIngreso) as urlImagenIngreso")
+            ->addSelect('et.nombre as entregaTipoNombre')
+            ->leftJoin('e.entregaTipo', 'et')
             ->where("e.celdaId = {$codigoCelda}")
             ->setMaxResults(20);
         $arEntregas = $queryBuilder->getQuery()->getResult();
