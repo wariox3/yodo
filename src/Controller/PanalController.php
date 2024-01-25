@@ -26,14 +26,14 @@ class PanalController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/panal/asignar', name: 'api_panal_asignar')]
-    public function asignar(Request $request, EntityManagerInterface $em) {
+    #[Route('/api/panal/vincular', name: 'api_panal_vincular')]
+    public function vincular(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;
         $codigoPanal = $raw['codigoPanal']?? null;
         $codigoCiudad = $raw['codigoCiudad']?? null;
         if($codigoUsuario && $codigoPanal && $codigoCiudad) {
-            $arrRespuesta = $em->getRepository(Panal::class)->asignar($codigoUsuario, $codigoPanal, $codigoCiudad);
+            $arrRespuesta = $em->getRepository(Panal::class)->vincular($codigoUsuario, $codigoPanal, $codigoCiudad);
             if(!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
             } else {

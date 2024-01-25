@@ -30,4 +30,22 @@ class EntregaController extends AbstractFOSRestController
         }
     }
 
+    #[Route('/api/entrega/nuevo', name: 'api_entrega_nuevo')]
+    public function nuevo(Request $request, EntityManagerInterface $em) {
+        $raw = json_decode($request->getContent(), true);
+        $codigoPanal = $raw['codigoPanal']?? null;
+        $celda = $raw['celda']?? null;
+        $codigoEntregaTipo = $raw['codigoEntregaTipo']?? null;
+        if($codigoPanal && $celda && $codigoEntregaTipo) {
+            $arrRespuesta = $em->getRepository(Entrega::class)->nuevo($raw);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
+
 }

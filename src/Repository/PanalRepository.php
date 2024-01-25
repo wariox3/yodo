@@ -32,7 +32,7 @@ class PanalRepository extends ServiceEntityRepository
         ];
     }
 
-    public function asignar($codigoUsuario, $codigoPanal, $codigoCiudad) {
+    public function vincular($codigoUsuario, $codigoPanal, $codigoCiudad) {
         $em = $this->getEntityManager();
         $arUsuario = $em->getRepository(Usuario::class)->find($codigoUsuario);
         if ($arUsuario) {

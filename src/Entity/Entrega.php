@@ -24,13 +24,13 @@ class Entrega
     #[ORM\Column(type: "datetime")]
     private $fechaIngreso;
 
-    #[ORM\Column(type: "datetime")]
+    #[ORM\Column(type: "datetime", nullable: true)]
     private $fechaEntrega;
 
-    #[ORM\Column(type:"string", length: 200)]
+    #[ORM\Column(type:"string", length: 200, nullable: true)]
     private ?string $descripcion;
 
-    #[ORM\Column(type:"string", length: 250)]
+    #[ORM\Column(type:"string", length: 250, nullable: true)]
     private ?string $urlImagenIngreso;
 
     #[ORM\Column(type: "boolean", options: ["default" => false])]
