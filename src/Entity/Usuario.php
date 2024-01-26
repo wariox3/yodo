@@ -46,6 +46,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: "integer", nullable: true)]
     private $ciudadId;
 
+    #[ORM\Column(type: "float", options: ["default" => 0])]
+    private $saldo = 0.0;
+
     #[ORM\ManyToOne(targetEntity: Celda::class, inversedBy: 'usuarios')]
     #[ORM\JoinColumn(name: "celda_id", referencedColumnName: "id")]
     private $celda;
@@ -338,6 +341,22 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVisitas(Collection $visitas): void
     {
         $this->visitas = $visitas;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSaldo(): float
+    {
+        return $this->saldo;
+    }
+
+    /**
+     * @param float $saldo
+     */
+    public function setSaldo(float $saldo): void
+    {
+        $this->saldo = $saldo;
     }
 
 

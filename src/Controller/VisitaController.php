@@ -94,4 +94,21 @@ class VisitaController extends AbstractFOSRestController
             return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
         }
     }
+
+    #[Route('/api/visita/cerrar', name: 'api_visita_cerrar')]
+    public function cerrar(Request $request, EntityManagerInterface $em) {
+        $raw = json_decode($request->getContent(), true);
+        $codigoVisita = $raw['codigoVisita']?? null;
+        $codigoUsuario = $raw['codigoUsuario']?? null;
+        if($codigoVisita && $codigoUsuario) {
+            $arrRespuesta = $em->getRepository(Visita::class)->cerrar($codigoVisita, $codigoUsuario);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
 }

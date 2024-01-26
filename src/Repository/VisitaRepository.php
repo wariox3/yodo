@@ -4,7 +4,6 @@ namespace App\Repository;
 
 use App\Entity\Celda;
 use App\Entity\CeldaUsuario;
-use App\Entity\Entrega;
 use App\Entity\Panal;
 use App\Entity\Usuario;
 use App\Entity\Visita;
@@ -12,7 +11,6 @@ use App\Utilidades\Firebase;
 use App\Utilidades\SpaceDO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use SpacesAPI\Spaces;
 
 class VisitaRepository extends ServiceEntityRepository
 {
@@ -199,6 +197,44 @@ class VisitaRepository extends ServiceEntityRepository
                     'errorMensaje' => "La visita no esta pendiente de autorizacion"
                 ];
             }
+        } else {
+            return [
+                'error' => true,
+                'errorMensaje' => "No existe la visita"
+            ];
+        }
+    }
+
+    public function cerrar($codigoVisita, $codigoUsuario)
+    {
+        $em = $this->getEntityManager();
+        $arVisita = $em->getRepository(Visita::class)->find($codigoVisita);
+        if($arVisita) {
+            if($arVisita->isEstadoCerrado() == false) {
+                $arUsuario = $em->getRepository(Usuario::class)->find($codigoUsuario);
+                if($arUsuario) {
+                    $arVisita->setEstadoCerrado(true);
+                    $em->persist($arVisita);
+                    $em->flush();
+                    return [
+                        'error' => false,
+                        'respuesta' => [
+                            'mensaje' => 'Se cerró la visita con exito'
+                        ]
+                    ];
+                } else {
+                    return [
+                        'error' => true,
+                        'errorMensaje' => "No existe el usuario"
+                    ];
+                }
+            } else {
+                return [
+                    'error' => true,
+                    'errorMensaje' => "La visita ya esta cerrada con anterioridad"
+                ];
+            }
+
         } else {
             return [
                 'error' => true,
