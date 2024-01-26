@@ -4,7 +4,9 @@ namespace App\Repository;
 
 use App\Entity\Celda;
 use App\Entity\CeldaUsuario;
+use App\Entity\Entrega;
 use App\Entity\Panal;
+use App\Entity\Usuario;
 use App\Entity\Visita;
 use App\Utilidades\Firebase;
 use App\Utilidades\SpaceDO;
@@ -100,6 +102,28 @@ class VisitaRepository extends ServiceEntityRepository
         }
     }
 
+    public function detalle($codigoVisita)
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Visita::class, 'v')
+            ->select('v.id')
+            ->addSelect('v.fecha')
+            ->addSelect('v.numeroIdentificacion')
+            ->addSelect('v.nombre')
+            ->addSelect('v.placa')
+            ->addSelect('v.estadoAutorizado')
+            ->addSelect('v.codigoIngreso')
+            ->addSelect("CONCAT('{$_ENV['ALMACENAMIENTO_URL']}', v.urlImagenIngreso) as urlImagenIngreso")
+            ->where("v.id = {$codigoVisita}");
+        $arVisita = $queryBuilder->getQuery()->getOneOrNullResult();
+        return [
+            'error' => false,
+            'respuesta' => [
+                'visita' => $arVisita
+            ]
+        ];
+    }
+
     public function pendiente($codigoPanal, $celda, $estadoAutorizado, $codigoIngreso)
     {
         $em = $this->getEntityManager();
@@ -135,5 +159,51 @@ class VisitaRepository extends ServiceEntityRepository
                 'visitas' => $arVisitas
             ]
         ];
+    }
+
+    public function autorizar($codigoVisita, $codigoUsuario)
+    {
+        $em = $this->getEntityManager();
+        $arVisita = $em->getRepository(Visita::class)->find($codigoVisita);
+        if($arVisita) {
+            if($arVisita->isEstadoAutorizado() == false) {
+                if($arVisita->isEstadoCerrado() == false) {
+                    $arUsuario = $em->getRepository(Usuario::class)->find($codigoUsuario);
+                    if($arUsuario) {
+                        $arVisita->setUsuarioAutoriza($arUsuario);
+                        $arVisita->setEstadoAutorizado(true);
+                        $em->persist($arVisita);
+                        $em->flush();
+                        return [
+                            'error' => false,
+                            'respuesta' => [
+                                'mensaje' => 'Visita autorizada con exito'
+                            ]
+
+                        ];
+                    } else {
+                        return [
+                            'error' => true,
+                            'errorMensaje' => "No existe el usuario"
+                        ];
+                    }
+                } else {
+                    return [
+                        'error' => true,
+                        'errorMensaje' => "La visita fue cerrada"
+                    ];
+                }
+            } else {
+                return [
+                    'error' => true,
+                    'errorMensaje' => "La visita no esta pendiente de autorizacion"
+                ];
+            }
+        } else {
+            return [
+                'error' => true,
+                'errorMensaje' => "No existe la visita"
+            ];
+        }
     }
 }

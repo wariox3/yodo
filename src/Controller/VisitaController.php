@@ -43,6 +43,22 @@ class VisitaController extends AbstractFOSRestController
         }
     }
 
+    #[Route('/api/visita/detalle', name: 'api_visita_detalle')]
+    public function visita(Request $request, EntityManagerInterface $em) {
+        $raw = json_decode($request->getContent(), true);
+        $codigoVisita = $raw['codigoVisita']?? null;
+        if($codigoVisita) {
+            $arrRespuesta = $em->getRepository(Visita::class)->detalle($codigoVisita);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
+
     #[Route('/api/visita/pendiente', name: 'api_visita_pendiente')]
     public function pendiente(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
@@ -62,4 +78,20 @@ class VisitaController extends AbstractFOSRestController
         }
     }
 
+    #[Route('/api/visita/autorizar', name: 'api_visita_autorizar')]
+    public function autorizar(Request $request, EntityManagerInterface $em) {
+        $raw = json_decode($request->getContent(), true);
+        $codigoVisita = $raw['codigoVisita']?? null;
+        $codigoUsuario = $raw['codigoUsuario']?? null;
+        if($codigoVisita && $codigoUsuario) {
+            $arrRespuesta = $em->getRepository(Visita::class)->autorizar($codigoVisita, $codigoUsuario);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
 }
