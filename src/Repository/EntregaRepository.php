@@ -8,6 +8,7 @@ use App\Entity\Entrega;
 use App\Entity\EntregaTipo;
 use App\Entity\Panal;
 use App\Entity\Usuario;
+use App\Utilidades\Firebase;
 use App\Utilidades\SpaceDO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -67,11 +68,11 @@ class EntregaRepository extends ServiceEntityRepository
                 $em->flush();
 
                 //Usuarios a los que se debe notificar
-                /*$arCeldaUsuarios = $em->getRepository(CeldaUsuario::class)->findBy(['codigoCeldaFk' => $arCelda->getCodigoCeldaPk()]);
+                $firebase = new Firebase();
+                $arCeldaUsuarios = $em->getRepository(CeldaUsuario::class)->findBy(['celdaId' => $arCelda->getId()]);
                 foreach ($arCeldaUsuarios as $arCeldaUsuario) {
-                    $this->firebase->nuevaEntrega($arCeldaUsuario->getUsuarioRel()->getTokenFirebase(), $arEntrega->getCodigoEntregaPk(), $tipo, 0);
-                }*/
-
+                    $firebase->nuevaEntrega($arCeldaUsuario->getUsuario()->getTokenFirebase(), $arEntrega->getId(), $arEntrega->getEntregaTipo()->getNombre(), 0);
+                }
                 return [
                     'error' => false,
                     'respuesta' => [

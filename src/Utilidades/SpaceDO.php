@@ -33,7 +33,7 @@ class SpaceDO
 
             $spaces = new Spaces($_ENV['DO_CLAVE_ACCESO'], $_ENV['DO_CLAVE_SECRETA'], $_ENV['DO_REGION']);
             $space = $spaces->space($_ENV['DO_BUCKET']);
-            $space->uploadFile($destinoLocal, $destinoDO, $mimeType);
+            $space->uploadFile($destinoLocal, $destinoDO, $mimeType, false);
             unlink($destinoLocal);
             return [
                 'url' => "{$destinoDO}"

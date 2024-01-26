@@ -3,8 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\Celda;
+use App\Entity\CeldaUsuario;
 use App\Entity\Panal;
 use App\Entity\Visita;
+use App\Utilidades\Firebase;
 use App\Utilidades\SpaceDO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -71,10 +73,11 @@ class VisitaRepository extends ServiceEntityRepository
                 $em->flush();
                 //Usuarios a los que se debe notificar
                 if($arCelda) {
-                    /*$arCeldaUsuarios = $em->getRepository(CeldaUsuario::class)->findBy(['codigoCeldaFk' => $arCelda->getCodigoCeldaPk()]);
+                    $firebase = new Firebase();
+                    $arCeldaUsuarios = $em->getRepository(CeldaUsuario::class)->findBy(['celdaId' => $arCelda->getId()]);
                     foreach ($arCeldaUsuarios as $arCeldaUsuario) {
-                        $this->firebase->nuevaVisita($arCeldaUsuario->getUsuarioRel()->getTokenFirebase(), $arVisita->getCodigoVisitaPk(), $nombre, 0);
-                    }*/
+                        $firebase->nuevaVisita($arCeldaUsuario->getUsuario()->getTokenFirebase(), $arVisita->getId(), $nombre, 0);
+                    }
                 }
                 return [
                     'error' => false,
