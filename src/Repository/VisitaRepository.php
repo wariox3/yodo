@@ -43,18 +43,13 @@ class VisitaRepository extends ServiceEntityRepository
         $em = $this->getEntityManager();
         $codigoPanal = $raw['codigoPanal']?? null;
         $celda = $raw['celda']?? null;
-        $codigoCelda = $raw['codigoCelda']?? null;
         $numeroIdentificacion = $raw['numeroIdentificacion']?? null;
         $nombre = $raw['nombre']?? null;
         $placa = $raw['placa']?? null;
         $imagen = $raw['imagenBase64']?? null;
         $arPanal = $em->getRepository(Panal::class)->find($codigoPanal);
         if($arPanal) {
-            if($codigoCelda) {
-                $arCelda = $em->getRepository(Celda::class)->find($codigoCelda);
-            } else {
-                $arCelda = $em->getRepository(Celda::class)->findOneBy(['panalId' => $codigoPanal, 'celda' => $celda]);
-            }
+            $arCelda = $em->getRepository(Celda::class)->findOneBy(['panalId' => $codigoPanal, 'celda' => $celda]);
             if($arCelda) {
                 $codigo = rand(10000, 99999);
                 $arVisita = new Visita();

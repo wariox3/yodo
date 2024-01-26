@@ -31,12 +31,7 @@ class VisitaController extends AbstractFOSRestController
         $raw = json_decode($request->getContent(), true);
         $codigoPanal = $raw['codigoPanal']?? null;
         $celda = $raw['celda']?? null;
-        $codigoCelda = $raw['codigoCelda']?? null;
-        $numeroIdentificacion = $raw['numeroIdentificacion']?? null;
-        $nombre = $raw['nombre']?? null;
-        $placa = $raw['placa']?? null;
-        $imagen = $raw['imagenBase64']?? null;
-        if($codigoPanal && ($celda || $codigoCelda)) {
+        if($codigoPanal && $celda) {
             $arrRespuesta = $em->getRepository(Visita::class)->nuevo($raw);
             if(!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
