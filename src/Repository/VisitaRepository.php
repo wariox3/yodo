@@ -5,8 +5,10 @@ namespace App\Repository;
 use App\Entity\Celda;
 use App\Entity\Panal;
 use App\Entity\Visita;
+use App\Utilidades\SpaceDO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use SpacesAPI\Spaces;
 
 class VisitaRepository extends ServiceEntityRepository
 {
@@ -61,8 +63,9 @@ class VisitaRepository extends ServiceEntityRepository
                 $arVisita->setPlaca($placa);
                 $arVisita->setCodigoIngreso($codigo);
                 if($imagen) {
-                    //$archivo = $this->space->subir('visita', $imagen);
-                    //$arVisita->setUrlImagen($archivo['url']);
+                    $spaceDO = new SpaceDO();
+                    $archivo = $spaceDO->subirB64('visita', $imagen);
+                    $arVisita->setUrlImagenIngreso($archivo['url']);
                 }
                 $em->persist($arVisita);
                 $em->flush();
