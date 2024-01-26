@@ -100,6 +100,7 @@ class EntregaRepository extends ServiceEntityRepository
             ->addSelect('e.fechaIngreso')
             ->addSelect('e.entregaTipoId')
             ->addSelect('e.descripcion')
+            ->addSelect("CONCAT('{$_ENV['ALMACENAMIENTO_URL']}', e.urlImagenIngreso) as urlImagenIngreso")
             ->addSelect('c.celda')
             ->addSelect('et.nombre as entregaTipoNombre')
             ->leftJoin('e.celda', 'c')
