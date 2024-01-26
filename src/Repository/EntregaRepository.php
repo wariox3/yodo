@@ -8,6 +8,7 @@ use App\Entity\Entrega;
 use App\Entity\EntregaTipo;
 use App\Entity\Panal;
 use App\Entity\Usuario;
+use App\Utilidades\SpaceDO;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -58,8 +59,9 @@ class EntregaRepository extends ServiceEntityRepository
                 $arEntrega->setFechaIngreso(new \DateTime('now'));
                 $arEntrega->setEntregaTipo($em->getReference(EntregaTipo::class, $codigoEntregaTipo));
                 if($imagen) {
-                    //$archivo = $this->space->subir('entrega', $imagen);
-                    //$arEntrega->setUrlImagenIngreso($archivo['url']);
+                    $spaceDO = new SpaceDO();
+                    $respuesta = $spaceDO->subirB64('entrega', $imagen);
+                    $arEntrega->setUrlImagenIngreso($respuesta['url']);
                 }
                 $em->persist($arEntrega);
                 $em->flush();
