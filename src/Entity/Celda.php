@@ -5,6 +5,7 @@ namespace App\Entity;
 
 use App\Repository\CeldaRepository;
 use App\Repository\PanalRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -49,6 +50,9 @@ class Celda
 
     #[ORM\OneToMany(targetEntity: Visita::class, mappedBy: 'celda')]
     private Collection $visitas;
+
+    #[ORM\OneToMany(targetEntity: Atencion::class, mappedBy: 'celda')]
+    private Collection $atenciones;
 
     /**
      * @return int|null
@@ -230,6 +234,15 @@ class Celda
         $this->visitas = $visitas;
     }
 
+    public function getAtenciones(): Collection
+    {
+        return $this->atenciones;
+    }
+
+    public function setAtenciones(Collection $atenciones): void
+    {
+        $this->atenciones = $atenciones;
+    }
 
 }
 

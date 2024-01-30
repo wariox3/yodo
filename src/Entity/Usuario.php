@@ -73,6 +73,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Caso::class, mappedBy: 'usuario')]
     private Collection $casos;
 
+    #[ORM\OneToMany(targetEntity: Atencion::class, mappedBy: 'usuario')]
+    private Collection $atenciones;
+
     /**
      * @var string The hashed password
      */
@@ -370,6 +373,16 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCasos(Collection $casos): void
     {
         $this->casos = $casos;
+    }
+
+    public function getAtenciones(): Collection
+    {
+        return $this->atenciones;
+    }
+
+    public function setAtenciones(Collection $atenciones): void
+    {
+        $this->atenciones = $atenciones;
     }
 
 
