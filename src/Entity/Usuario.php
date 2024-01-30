@@ -70,6 +70,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Visita::class, mappedBy: 'usuarioAutoriza')]
     private Collection $visitas;
 
+    #[ORM\OneToMany(targetEntity: Caso::class, mappedBy: 'usuario')]
+    private Collection $casos;
+
     /**
      * @var string The hashed password
      */
@@ -357,6 +360,16 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSaldo(float $saldo): void
     {
         $this->saldo = $saldo;
+    }
+
+    public function getCasos(): Collection
+    {
+        return $this->casos;
+    }
+
+    public function setCasos(Collection $casos): void
+    {
+        $this->casos = $casos;
     }
 
 

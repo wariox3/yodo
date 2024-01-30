@@ -43,6 +43,9 @@ class Panal
     #[ORM\OneToMany(targetEntity: Visita::class, mappedBy: 'panal')]
     private Collection $visitas;
 
+    #[ORM\OneToMany(targetEntity: Caso::class, mappedBy: 'panal')]
+    private Collection $casos;
+
     /**
      * @return int|null
      */
@@ -201,6 +204,16 @@ class Panal
     public function setVisitas(Collection $visitas): void
     {
         $this->visitas = $visitas;
+    }
+
+    public function getCasos(): Collection
+    {
+        return $this->casos;
+    }
+
+    public function setCasos(Collection $casos): void
+    {
+        $this->casos = $casos;
     }
 
 
