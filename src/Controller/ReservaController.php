@@ -9,7 +9,7 @@ use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class reservaController extends AbstractFOSRestController
+class ReservaController extends AbstractFOSRestController
 {
     #[Route('/api/reserva/lista', name: 'api_reserva_lista')]
     public function lista(Request $request, EntityManagerInterface $em)
@@ -84,6 +84,5 @@ class reservaController extends AbstractFOSRestController
             return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
         }
     }
-
 
 }

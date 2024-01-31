@@ -65,7 +65,6 @@ class AtencionController extends AbstractFOSRestController
         }
     }
 
-
     #[Route('/api/atencion/atendido', name: 'api_atencion_atendido')]
     public function atendido(Request $request, EntityManagerInterface $em)
     {

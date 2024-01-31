@@ -7,4 +7,10 @@ INSERT INTO public.ciudad (id,estado_id,nombre) VALUES
 INSERT INTO public.entrega_tipo (id,nombre) VALUES
 	 (1,'Caja'),
 	 (2,'Sobre'),
-	 (3,'Paquete');	 
+	 (3,'Paquete');
+INSERT INTO public.caso_tipo (id,nombre) VALUES
+											 (1,'Felicitación'),
+											 (2,'Petición'),
+											 (3,'Queja'),
+											 (4,'Reclamo'),
+											 (5,'Sugerencia');
