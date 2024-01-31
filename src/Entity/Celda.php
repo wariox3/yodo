@@ -54,6 +54,9 @@ class Celda
     #[ORM\OneToMany(targetEntity: Atencion::class, mappedBy: 'celda')]
     private Collection $atenciones;
 
+    #[ORM\OneToMany(targetEntity: ReservaDetalle::class, mappedBy: 'celda')]
+    private Collection $reservasDetalles;
+
     /**
      * @return int|null
      */
@@ -243,6 +246,17 @@ class Celda
     {
         $this->atenciones = $atenciones;
     }
+
+    public function getReservasDetalles(): Collection
+    {
+        return $this->reservasDetalles;
+    }
+
+    public function setReservasDetalles(Collection $reservasDetalles): void
+    {
+        $this->reservasDetalles = $reservasDetalles;
+    }
+
 
 }
 

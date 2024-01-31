@@ -49,6 +49,9 @@ class Panal
     #[ORM\OneToMany(targetEntity: Contenido::class, mappedBy: 'panal')]
     private Collection $contenidos;
 
+    #[ORM\OneToMany(targetEntity: Reserva::class, mappedBy: 'panal')]
+    private Collection $reservas;
+
     /**
      * @return int|null
      */
@@ -227,6 +230,16 @@ class Panal
     public function setContenidos(Collection $contenidos): void
     {
         $this->contenidos = $contenidos;
+    }
+
+    public function getReservas(): Collection
+    {
+        return $this->reservas;
+    }
+
+    public function setReservas(Collection $reservas): void
+    {
+        $this->reservas = $reservas;
     }
 
 
