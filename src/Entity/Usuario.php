@@ -76,6 +76,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Atencion::class, mappedBy: 'usuario')]
     private Collection $atenciones;
 
+    #[ORM\OneToMany(targetEntity: Soporte::class, mappedBy: 'usuario')]
+    private Collection $soportes;
+
     /**
      * @var string The hashed password
      */
