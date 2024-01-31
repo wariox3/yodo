@@ -29,7 +29,7 @@ class CasoController extends AbstractFOSRestController
 
 
     #[Route('/api/caso/nuevo', name: 'api_caso_nuevo')]
-    public function detalleNuevoV1(Request $request, EntityManagerInterface $em)
+    public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;

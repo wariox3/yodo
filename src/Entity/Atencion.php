@@ -72,17 +72,22 @@ class Atencion
         return $this;
     }
 
-    public function getCelda(): ?celda
+    /**
+     * @return null
+     */
+    public function getCelda()
     {
-        return $this->Celda;
+        return $this->celda;
     }
 
-    public function setCelda(?celda $Celda): static
+    /**
+     * @param null $celda
+     */
+    public function setCelda($celda): void
     {
-        $this->Celda = $Celda;
-
-        return $this;
+        $this->celda = $celda;
     }
+
 
     /**
      * @return mixed
