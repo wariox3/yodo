@@ -79,7 +79,6 @@ class CasoRepository extends ServiceEntityRepository
                 'casos' => $arCasos
             ]
         ];
-
     }
 
     public function apiDetalle($codigoCaso)

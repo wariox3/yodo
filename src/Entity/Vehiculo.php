@@ -17,7 +17,7 @@ class Vehiculo
     private $modelo = null;
 
     #[ORM\Column(type: 'string', length: 10)]
-    private $plata;
+    private $placa;
 
     public function getId(): ?int
     {
@@ -36,15 +36,19 @@ class Vehiculo
         return $this;
     }
 
-    public function getPlata(): ?string
+    /**
+     * @return mixed
+     */
+    public function getPlaca()
     {
-        return $this->plata;
+        return $this->placa;
     }
 
-    public function setPlata(string $plata): static
+    /**
+     * @param mixed $placa
+     */
+    public function setPlaca($placa): void
     {
-        $this->plata = $plata;
-
-        return $this;
+        $this->placa = $placa;
     }
 }

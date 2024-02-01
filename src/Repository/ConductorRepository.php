@@ -6,14 +6,6 @@ use App\Entity\Conductor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Conductor>
- *
- * @method Conductor|null find($id, $lockMode = null, $lockVersion = null)
- * @method Conductor|null findOneBy(array $criteria, array $orderBy = null)
- * @method Conductor[]    findAll()
- * @method Conductor[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class ConductorRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
@@ -21,28 +13,40 @@ class ConductorRepository extends ServiceEntityRepository
         parent::__construct($registry, Conductor::class);
     }
 
-//    /**
-//     * @return Conductor[] Returns an array of Conductor objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('c.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function lista()
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Conductor::class, 'c')
+            ->select('c.id')
+            ->addSelect('c.nombre')
+            ->addSelect('c.alias')
+            ->addSelect('c.numeroIdentificacion')
+            ->addSelect('c.fechaNacimiento');
+        $arConductores = $queryBuilder->getQuery()->getResult();
+        return [
+            'error' => false,
+            'respuesta' => [
+                'conductores' => $arConductores
+            ]
+        ];
+    }
 
-//    public function findOneBySomeField($value): ?Conductor
-//    {
-//        return $this->createQueryBuilder('c')
-//            ->andWhere('c.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function nuevo($nombre, $alias, $fechaNacimiento, $numeroIdentificacion)
+    {
+        $em = $this->getEntityManager();
+        $arConductor = new Conductor();
+        $arConductor->setNombre($nombre);
+        $arConductor->setAlias($alias);
+        $arConductor->setFechaNacimiento(new \DateTime($fechaNacimiento));
+        $arConductor->setNumeroIdentificacion($numeroIdentificacion);
+        $em->persist($arConductor);
+        $em->flush();
+        return [
+            'error' => false,
+            'respuesta' => [
+                'codigoConductor' => $arConductor->getId(),
+            ]
+        ];
+    }
+
 }
