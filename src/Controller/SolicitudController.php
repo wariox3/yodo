@@ -24,8 +24,26 @@ class SolicitudController extends AbstractFOSRestController
     public function aplicar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;
-        if($codigoUsuario) {
-            $arrRespuesta = $em->getRepository(Solicitud::class)->aplicar($codigoUsuario);
+        $codigoSolicitud = $raw['codigoSolicitud']?? null;
+        if($codigoUsuario && $codigoSolicitud) {
+            $arrRespuesta = $em->getRepository(Solicitud::class)->aplicar($codigoUsuario, $codigoSolicitud);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
+
+    #[Route('/api/solicitud/asignar', name: 'api_solicitud_asignar')]
+    public function asignar(Request $request, EntityManagerInterface $em) {
+        $raw = json_decode($request->getContent(), true);
+        $codigoUsuario = $raw['codigoUsuario']?? null;
+        $codigoSolicitudAplicacion = $raw['codigoSolicitudAplicacion']?? null;
+        if($codigoUsuario && $codigoSolicitudAplicacion) {
+            $arrRespuesta = $em->getRepository(Solicitud::class)->asignar($codigoUsuario, $codigoSolicitudAplicacion);
             if(!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
             } else {

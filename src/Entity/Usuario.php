@@ -79,6 +79,15 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Soporte::class, mappedBy: 'usuario')]
     private Collection $soportes;
 
+    #[ORM\OneToMany(targetEntity: Solicitud::class, mappedBy: 'usuario')]
+    private Collection $solcitudes;
+
+    #[ORM\OneToMany(targetEntity: Solicitud::class, mappedBy: 'usuarioAsignado')]
+    private Collection $solcitudesUsuarioAsignado;
+
+    #[ORM\OneToMany(targetEntity: SolicitudAplicacion::class, mappedBy: 'usuario')]
+    private Collection $solicitudesAplicaciones;
+
     /**
      * @var string The hashed password
      */
@@ -207,7 +216,6 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
         $this->tokenFirebase = $tokenFirebase;
     }
 
-
     /**
      * @return mixed
      */
@@ -254,6 +262,22 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCiudadId($ciudadId): void
     {
         $this->ciudadId = $ciudadId;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSaldo(): float
+    {
+        return $this->saldo;
+    }
+
+    /**
+     * @param float $saldo
+     */
+    public function setSaldo(float $saldo): void
+    {
+        $this->saldo = $saldo;
     }
 
     /**
@@ -353,41 +377,100 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return float
+     * @return Collection
      */
-    public function getSaldo(): float
-    {
-        return $this->saldo;
-    }
-
-    /**
-     * @param float $saldo
-     */
-    public function setSaldo(float $saldo): void
-    {
-        $this->saldo = $saldo;
-    }
-
     public function getCasos(): Collection
     {
         return $this->casos;
     }
 
+    /**
+     * @param Collection $casos
+     */
     public function setCasos(Collection $casos): void
     {
         $this->casos = $casos;
     }
 
+    /**
+     * @return Collection
+     */
     public function getAtenciones(): Collection
     {
         return $this->atenciones;
     }
 
+    /**
+     * @param Collection $atenciones
+     */
     public function setAtenciones(Collection $atenciones): void
     {
         $this->atenciones = $atenciones;
     }
 
+    /**
+     * @return Collection
+     */
+    public function getSoportes(): Collection
+    {
+        return $this->soportes;
+    }
+
+    /**
+     * @param Collection $soportes
+     */
+    public function setSoportes(Collection $soportes): void
+    {
+        $this->soportes = $soportes;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getSolcitudes(): Collection
+    {
+        return $this->solcitudes;
+    }
+
+    /**
+     * @param Collection $solcitudes
+     */
+    public function setSolcitudes(Collection $solcitudes): void
+    {
+        $this->solcitudes = $solcitudes;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getSolcitudesUsuarioAsignado(): Collection
+    {
+        return $this->solcitudesUsuarioAsignado;
+    }
+
+    /**
+     * @param Collection $solcitudesUsuarioAsignado
+     */
+    public function setSolcitudesUsuarioAsignado(Collection $solcitudesUsuarioAsignado): void
+    {
+        $this->solcitudesUsuarioAsignado = $solcitudesUsuarioAsignado;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getSolicitudesAplicaciones(): Collection
+    {
+        return $this->solicitudesAplicaciones;
+    }
+
+    /**
+     * @param Collection $solicitudesAplicaciones
+     */
+    public function setSolicitudesAplicaciones(Collection $solicitudesAplicaciones): void
+    {
+        $this->solicitudesAplicaciones = $solicitudesAplicaciones;
+    }
 
 
 }

@@ -4,13 +4,13 @@ namespace App\Entity;
 
 use App\Repository\AtencionRepository;
 use App\Repository\ServicioRepository;
+use App\Repository\SolicitudAplicacionRepository;
 use App\Repository\SolicitudRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SolicitudRepository::class)]
-class Solicitud
+#[ORM\Entity(repositoryClass: SolicitudAplicacionRepository::class)]
+class SolicitudAplicacion
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -20,28 +20,22 @@ class Solicitud
     #[ORM\Column(type: "datetime")]
     private $fecha = null;
 
-    #[ORM\Column(length: 200, nullable: true)]
-    private $descripcion = null;
-
     #[ORM\Column(type: "integer")]
     private $usuarioId;
 
-    #[ORM\Column(type: "integer", nullable: true)]
-    private $usuarioAsignadoId;
+    #[ORM\Column(type: "integer")]
+    private $solicitudId;
 
     #[ORM\Column(type: "boolean", options: ["default" => false])]
     private $estadoAsignado = false;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class, inversedBy: 'solicitudes')]
+    #[ORM\ManyToOne(targetEntity: Usuario::class, inversedBy: 'solicitudesAplicaciones')]
     #[ORM\JoinColumn(name: "usuario_id", referencedColumnName: "id")]
     private $usuario;
 
-    #[ORM\ManyToOne(targetEntity: Usuario::class, inversedBy: 'solicitudesUsuarioAsignado')]
-    #[ORM\JoinColumn(name: "usuario_asignado_id", referencedColumnName: "id")]
-    private $usuarioAsignado;
-
-    #[ORM\OneToMany(targetEntity: SolicitudAplicacion::class, mappedBy: 'solicitud')]
-    private Collection $solicitudesAplicaciones;
+    #[ORM\ManyToOne(targetEntity: Solicitud::class, inversedBy: 'solicitudesAplicaciones')]
+    #[ORM\JoinColumn(name: "solicitud_id", referencedColumnName: "id")]
+    private $solicitud;
 
     /**
      * @return int|null
@@ -76,22 +70,6 @@ class Solicitud
     }
 
     /**
-     * @return null
-     */
-    public function getDescripcion()
-    {
-        return $this->descripcion;
-    }
-
-    /**
-     * @param null $descripcion
-     */
-    public function setDescripcion($descripcion): void
-    {
-        $this->descripcion = $descripcion;
-    }
-
-    /**
      * @return mixed
      */
     public function getUsuarioId()
@@ -110,17 +88,17 @@ class Solicitud
     /**
      * @return mixed
      */
-    public function getUsuarioAsignadoId()
+    public function getSolicitudId()
     {
-        return $this->usuarioAsignadoId;
+        return $this->solicitudId;
     }
 
     /**
-     * @param mixed $usuarioAsignadoId
+     * @param mixed $solicitudId
      */
-    public function setUsuarioAsignadoId($usuarioAsignadoId): void
+    public function setSolicitudId($solicitudId): void
     {
-        $this->usuarioAsignadoId = $usuarioAsignadoId;
+        $this->solicitudId = $solicitudId;
     }
 
     /**
@@ -158,35 +136,18 @@ class Solicitud
     /**
      * @return mixed
      */
-    public function getUsuarioAsignado()
+    public function getSolicitud()
     {
-        return $this->usuarioAsignado;
+        return $this->solicitud;
     }
 
     /**
-     * @param mixed $usuarioAsignado
+     * @param mixed $solicitud
      */
-    public function setUsuarioAsignado($usuarioAsignado): void
+    public function setSolicitud($solicitud): void
     {
-        $this->usuarioAsignado = $usuarioAsignado;
+        $this->solicitud = $solicitud;
     }
-
-    /**
-     * @return Collection
-     */
-    public function getSolicitudesAplicaciones(): Collection
-    {
-        return $this->solicitudesAplicaciones;
-    }
-
-    /**
-     * @param Collection $solicitudesAplicaciones
-     */
-    public function setSolicitudesAplicaciones(Collection $solicitudesAplicaciones): void
-    {
-        $this->solicitudesAplicaciones = $solicitudesAplicaciones;
-    }
-
 
 
 }
