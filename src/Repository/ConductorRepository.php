@@ -49,4 +49,23 @@ class ConductorRepository extends ServiceEntityRepository
         ];
     }
 
+    public function detalle($codigoConductor)
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Conductor::class, 'c')
+            ->select('c.id')
+            ->addSelect('c.nombre')
+            ->addSelect('c.alias')
+            ->addSelect('c.numeroIdentificacion')
+            ->addSelect('c.fechaNacimiento')
+            ->where("c.id = {$codigoConductor}");
+        $arConductor = $queryBuilder->getQuery()->getResult();
+        return [
+            'error' => false,
+            'respuesta' => [
+                'conductor' => $arConductor
+            ]
+        ];
+    }
+
 }

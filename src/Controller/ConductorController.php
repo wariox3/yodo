@@ -42,4 +42,21 @@ class ConductorController extends AbstractFOSRestController
             return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
         }
     }
+
+    #[Route('/api/conductor/detalle', name: 'api_conductor_detalle')]
+    public function detalle(Request $request, EntityManagerInterface $em)
+    {
+        $raw = json_decode($request->getContent(), true);
+        $codigoConductor = $raw['codigoConductor'] ?? null;
+        if ($codigoConductor) {
+            $arrRespuesta = $em->getRepository(Conductor::class)->detalle($codigoConductor);
+            if (!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
 }

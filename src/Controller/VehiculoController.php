@@ -41,4 +41,21 @@ class VehiculoController extends AbstractFOSRestController
             return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
         }
     }
+
+    #[Route('/api/vehiculo/detalle', name: 'api_vehiculo_detalle')]
+    public function detalle(Request $request, EntityManagerInterface $em)
+    {
+        $raw = json_decode($request->getContent(), true);
+        $codigoVehiculo = $raw['codigoVehiculo'] ?? null;
+        if ($codigoVehiculo) {
+            $arrRespuesta = $em->getRepository(Vehiculo::class)->detalle($codigoVehiculo);
+            if (!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
 }
