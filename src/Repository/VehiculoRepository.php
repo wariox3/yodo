@@ -61,4 +61,21 @@ class VehiculoRepository extends ServiceEntityRepository
             ]
         ];
     }
+
+    public function buscar()
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Vehiculo::class, 'v')
+            ->select('v.id')
+            ->addSelect('v.placa')
+            ->setMaxResults(10);
+        $arVehiculos = $queryBuilder->getQuery()->getResult();
+        return [
+            'error' => false,
+            'respuesta' => [
+                'vehiculos' => $arVehiculos
+            ]
+        ];
+    }
+
 }

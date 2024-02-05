@@ -68,4 +68,20 @@ class ConductorRepository extends ServiceEntityRepository
         ];
     }
 
+    public function buscar()
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Conductor::class, 'c')
+            ->select('c.id')
+            ->addSelect('c.nombre')
+            ->setMaxResults(10);
+        $arConductores = $queryBuilder->getQuery()->getResult();
+        return [
+            'error' => false,
+            'respuesta' => [
+                'conductores' => $arConductores
+            ]
+        ];
+    }
+
 }
