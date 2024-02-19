@@ -16,7 +16,7 @@ class CasoController extends AbstractFOSRestController
         $codigoPanal = $raw['codigoPanal']?? null;
         $codigoUsuario = $raw['codigoUsuario']?? null;
         if($codigoPanal && $codigoUsuario) {
-            $arrRespuesta = $em->getRepository(Caso::class)->apiLista($codigoPanal, $codigoUsuario);
+            $arrRespuesta = $em->getRepository(Caso::class)->lista($codigoPanal, $codigoUsuario);
             if(!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
             } else {
@@ -36,7 +36,7 @@ class CasoController extends AbstractFOSRestController
         $tipo = $raw['tipo']?? null;
         $descripcion = $raw['descripcion']?? null;
         if($codigoUsuario && $descripcion && $tipo) {
-            $arrRespuesta = $em->getRepository(Caso::class)->apiNuevo($tipo, $codigoUsuario, $descripcion);
+            $arrRespuesta = $em->getRepository(Caso::class)->nuevo($tipo, $codigoUsuario, $descripcion);
             if(!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
             } else {

@@ -20,4 +20,53 @@ class Operador
     #[ORM\OneToMany(targetEntity: Despacho::class, mappedBy: 'operador')]
     private Collection $despachos;
 
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int|null $id
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNombre()
+    {
+        return $this->nombre;
+    }
+
+    /**
+     * @param mixed $nombre
+     */
+    public function setNombre($nombre): void
+    {
+        $this->nombre = $nombre;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDespachos(): Collection
+    {
+        return $this->despachos;
+    }
+
+    /**
+     * @param Collection $despachos
+     */
+    public function setDespachos(Collection $despachos): void
+    {
+        $this->despachos = $despachos;
+    }
+
+
 }

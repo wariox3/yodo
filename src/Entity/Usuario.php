@@ -88,6 +88,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: SolicitudAplicacion::class, mappedBy: 'usuario')]
     private Collection $solicitudesAplicaciones;
 
+    #[ORM\OneToMany(targetEntity: Despacho::class, mappedBy: 'usuario')]
+    private Collection $despachos;
+
     /**
      * @var string The hashed password
      */
@@ -470,6 +473,22 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setSolicitudesAplicaciones(Collection $solicitudesAplicaciones): void
     {
         $this->solicitudesAplicaciones = $solicitudesAplicaciones;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getDespachos(): Collection
+    {
+        return $this->despachos;
+    }
+
+    /**
+     * @param Collection $despachos
+     */
+    public function setDespachos(Collection $despachos): void
+    {
+        $this->despachos = $despachos;
     }
 
 
