@@ -37,6 +37,7 @@ class Caso
 
     #[ORM\Column(type: "boolean", options: ["default" => false])]
     private $estadoAtendido = false;
+
     #[ORM\Column(type: "boolean", options: ["default" => false])]
     private $estadoCerrado = false;
 
