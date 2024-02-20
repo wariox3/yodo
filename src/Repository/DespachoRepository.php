@@ -76,7 +76,7 @@ class DespachoRepository extends ServiceEntityRepository
                     return [
                         'error' => false,
                         'respuesta' => [
-                            'codigoCaso' => 1,
+                            'codigoDespacho' => 1,
                         ]
                     ];
 

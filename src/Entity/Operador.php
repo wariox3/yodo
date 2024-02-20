@@ -17,6 +17,15 @@ class Operador
     #[ORM\Column(type: 'string', length: 200)]
     private $nombre;
 
+    #[ORM\Column(type: 'string', length: 200, nullable: true)]
+    private $puntoServicio;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private $puntoServicioUsuario;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private $puntoServicioClave;
+
     #[ORM\OneToMany(targetEntity: Despacho::class, mappedBy: 'operador')]
     private Collection $despachos;
 
@@ -66,6 +75,54 @@ class Operador
     public function setDespachos(Collection $despachos): void
     {
         $this->despachos = $despachos;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPuntoServicio()
+    {
+        return $this->puntoServicio;
+    }
+
+    /**
+     * @param mixed $puntoServicio
+     */
+    public function setPuntoServicio($puntoServicio): void
+    {
+        $this->puntoServicio = $puntoServicio;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPuntoServicioUsuario()
+    {
+        return $this->puntoServicioUsuario;
+    }
+
+    /**
+     * @param mixed $puntoServicioUsuario
+     */
+    public function setPuntoServicioUsuario($puntoServicioUsuario): void
+    {
+        $this->puntoServicioUsuario = $puntoServicioUsuario;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPuntoServicioClave()
+    {
+        return $this->puntoServicioClave;
+    }
+
+    /**
+     * @param mixed $puntoServicioClave
+     */
+    public function setPuntoServicioClave($puntoServicioClave): void
+    {
+        $this->puntoServicioClave = $puntoServicioClave;
     }
 
 

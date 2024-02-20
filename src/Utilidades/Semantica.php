@@ -13,7 +13,7 @@ class Semantica
     public function post($arOperador, $ruta, $parametros) {
         if($arOperador) {
             if($arOperador->getPuntoServicio()) {
-                if($arOperador->getUsuarioServicio() && $arOperador->getClaveServicio()) {
+                if($arOperador->getPuntoServicioUsuario() && $arOperador->getPuntoServicioClave()) {
                     $datosJson = json_encode($parametros);
                     $url = $arOperador->getPuntoServicio() . $ruta;
                     $ch = curl_init();
@@ -22,7 +22,7 @@ class Semantica
                     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                     curl_setopt($ch, CURLOPT_POSTFIELDS, $datosJson);
                     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-                    curl_setopt($ch, CURLOPT_USERPWD, "{$arOperador->getUsuarioServicio()}:{$arOperador->getClaveServicio()}");
+                    curl_setopt($ch, CURLOPT_USERPWD, "{$arOperador->getPuntoServicioUsuario()}:{$arOperador->getPuntoServicioClave()}");
                     curl_setopt($ch, CURLOPT_HTTPHEADER, array(
                             'Content-Type: application/json',
                             'Content-Length: ' . strlen($datosJson))
