@@ -1,9 +1,14 @@
 # yodo
 
 Configurar .env
-ALMACENAMIENTO_URL="123"
-DO_CLAVE_ACCESO="123"
-DO_CLAVE_SECRETA="123"
+ALMACENAMIENTO_URL=""
+DO_CLAVE_ACCESO=""
+DO_CLAVE_SECRETA=""
+DO_REGION=""
+DO_BUCKET=""
+
+GM_CLAVE=""
+
 
 Correr comando
 php bin/console lexik:jwt:generate-keypair

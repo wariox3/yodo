@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Despacho;
 use App\Entity\Operador;
 use App\Entity\Usuario;
+use App\Utilidades\Semantica;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -51,6 +52,8 @@ class DespachoRepository extends ServiceEntityRepository
                     $parametros = [
                         "codigoDespacho" => $codigoDespacho,
                     ];
+                    $semantica = new Semantica();
+                    $respuesta = $semantica->post($arOperador, '/api/transporte/despacho/cargar/v2', $parametros);
                     /*$respuesta = $this->cromo->post($arOperador, '/api/transporte/despacho/cargar', $parametros);
                     if($respuesta['error'] == false) {
                         $arDespacho = new Despacho();

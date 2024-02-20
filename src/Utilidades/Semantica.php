@@ -12,10 +12,10 @@ class Semantica
 
     public function post($arOperador, $ruta, $parametros) {
         if($arOperador) {
-            if($arOperador->getPuntoServicioCromo()) {
+            if($arOperador->getPuntoServicio()) {
                 if($arOperador->getUsuarioServicio() && $arOperador->getClaveServicio()) {
                     $datosJson = json_encode($parametros);
-                    $url = $arOperador->getPuntoServicioCromo() . $ruta;
+                    $url = $arOperador->getPuntoServicio() . $ruta;
                     $ch = curl_init();
                     curl_setopt($ch, CURLOPT_URL, $url);
                     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
