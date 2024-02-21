@@ -12,6 +12,23 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DespachoController extends AbstractFOSRestController
 {
+    #[Route('/api/despacho/lista', name: 'api_despacho_lista')]
+    public function lista(Request $request, EntityManagerInterface $em)
+    {
+        $raw = json_decode($request->getContent(), true);
+        $codigoUsuario = $raw['codigoUsuario']?? null;
+        if($codigoUsuario) {
+            $arrRespuesta = $em->getRepository(Despacho::class)->lista($codigoUsuario);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
+
     #[Route('/api/despacho/nuevo', name: 'api_despacho_nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em)
     {

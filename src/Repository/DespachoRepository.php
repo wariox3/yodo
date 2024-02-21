@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Despacho;
+use App\Entity\Guia;
 use App\Entity\Operador;
 use App\Entity\Usuario;
 use App\Utilidades\Semantica;
@@ -54,33 +55,52 @@ class DespachoRepository extends ServiceEntityRepository
                     ];
                     $semantica = new Semantica();
                     $respuesta = $semantica->post($arOperador, '/api/transporte/despacho/cargar/v2', $parametros);
-                    /*$respuesta = $this->cromo->post($arOperador, '/api/transporte/despacho/cargar', $parametros);
                     if($respuesta['error'] == false) {
+                        $despacho = $respuesta['despacho'];
+                        $guias = $respuesta['guias'];
                         $arDespacho = new Despacho();
-                        $arDespacho->setFecha(new \DateTime('now'));
-                        $arDespacho->setFechaDespacho(date_create($respuesta['fecha']));
-                        $arDespacho->setCodigoDespachoClaseFk($respuesta['codigoDespachoClase']);
-                        $arDespacho->setUsuarioRel($arUsuario);
-                        $arDespacho->setOperadorRel($arOperador);
-                        $arDespacho->setCodigoDespacho($codigoDespacho);
-                        $arDespacho->setToken($token);
+                        $arDespacho->setCodigo($codigoDespacho);
+                        $arDespacho->setFechaCreacion(new \DateTime('now'));
+                        $arDespacho->setFechaSalida(date_create($despacho['fechaSalida']));
+                        $arDespacho->setNumero($despacho['numero']);
+                        $arDespacho->setUsuario($arUsuario);
+                        $arDespacho->setOperador($arOperador);
+                        $arDespacho->setToken($despacho['apiToken']);
                         $em->persist($arDespacho);
+                        foreach ($guias as $guia) {
+                            $arGuia = new Guia();
+                            $arGuia->setDespacho($arDespacho);
+                            $arGuia->setCodigo($guia['codigoGuiaFk']);
+                            $arGuia->setFecha(date_create($guia['fechaIngreso']));
+                            $arGuia->setDocumentoCliente($guia['documentoCliente']);
+                            $arGuia->setUnidades($guia['unidades']);
+                            $arGuia->setPesoReal($guia['pesoReal']);
+                            $arGuia->setPesoVolumen($guia['pesoVolumen']);
+                            $arGuia->setVrCobroEntrega($guia['vrCobroEntrega']);
+                            $arGuia->setRemitente($guia['nombreRemitente']);
+                            $arGuia->setDestinatario($guia['destinatario']);
+                            $arGuia->setDestinatarioTelefono($guia['telefonoDestinatario']);
+                            $arGuia->setDestinatarioDireccion($guia['direccionDestinatario']);
+                            $arGuia->setCiudadDestinoNombre($guia['destino']);
+                            $arGuia->setDepartamentoDestinoNombre($guia['departamentoDestinoNombre']);
+                            $arGuia->setEntregaRequiereFoto($guia['terceroEntregaRequiereFoto']);
+                            $arGuia->setEntregaRequiereFirma($guia['terceroEntregaRequiereFirma']);
+                            $arGuia->setEntregaRequiereDatos($guia['terceroEntregaRequiereDatos']);
+                            $em->persist($arGuia);
+                        }
                         $em->flush();
                         return [
                             'error' => false,
-                            'codigoDespacho' => $arDespacho->getCodigoDespachoPk(),
+                            'respuesta' => [
+                                'id' => $arDespacho->getId(),
+                            ]
                         ];
                     } else {
-                        return $respuesta;
-                    }*/
-                    return [
-                        'error' => false,
-                        'respuesta' => [
-                            'codigoDespacho' => 1,
-                        ]
-                    ];
-
-
+                        return [
+                            'error' => true,
+                            'errorMensaje' => $respuesta['errorMensaje']
+                        ];
+                    }
                 }
             } else {
                 return [
@@ -94,5 +114,30 @@ class DespachoRepository extends ServiceEntityRepository
                 'errorMensaje' => "No existe el usuario"
             ];
         }
+    }
+
+    public function lista($codigoUsuario)
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Despacho::class, 'd')
+            ->select('d.id')
+            ->addSelect('d.numero')
+            ->addSelect('d.fechaCreacion')
+            ->addSelect('d.fechaSalida')
+            ->addSelect('d.operadorId')
+            ->addSelect('d.codigo')
+            ->addSelect('d.token')
+            ->addSelect('o.nombre as operadorNombre')
+            ->leftJoin('d.operador', 'o')
+            ->andWhere("d.usuarioId = {$codigoUsuario}")
+            ->orderBy('d.fechaCreacion', 'DESC')
+            ->setMaxResults(20);
+        $arDespachos = $queryBuilder->getQuery()->getResult();
+        return [
+            'error' => false,
+            'respuesta' => [
+                'despachos' => $arDespachos,
+            ]
+        ];
     }
 }

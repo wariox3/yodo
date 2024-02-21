@@ -29,8 +29,11 @@ class Despacho
     #[ORM\Column(type: "integer")]
     private $numero;
 
-    #[ORM\Column(type: "integer")]
+    #[ORM\Column(type: "integer", nullable: true)]
     private $usuarioId;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $token = null;
 
     #[ORM\ManyToOne(targetEntity: Operador::class, inversedBy: 'despachos')]
     #[ORM\JoinColumn(name: "operador_id", referencedColumnName: "id")]
@@ -201,6 +204,22 @@ class Despacho
     public function setUsuario($usuario): void
     {
         $this->usuario = $usuario;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getToken(): ?string
+    {
+        return $this->token;
+    }
+
+    /**
+     * @param string|null $token
+     */
+    public function setToken(?string $token): void
+    {
+        $this->token = $token;
     }
 
 
