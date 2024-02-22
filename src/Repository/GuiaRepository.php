@@ -34,6 +34,35 @@ class GuiaRepository extends ServiceEntityRepository
             $arGuia = $em->getRepository(Guia::class)->find($guia);
             if($arGuia) {
                 if(!$arGuia->isEstadoEntrega()) {
+                    if ($imagenes) {
+                        $directorioDestino = "/masivo/";
+                        if (file_exists($directorioDestino)) {
+                            foreach ($arrImagenes as $imagen) {
+                                $archivoDestino = rand(100000, 999999) . "_" . $codigoGuia . ".jpg";
+                                $destino = $directorio . $archivoDestino;
+                                $Base64Img = base64_decode($imagen['base64']);
+                                file_put_contents($destino, $Base64Img);
+                                $tamano = filesize($destino);
+                                $arMasivo = new DocMasivo();
+                                $arMasivo->setFecha(new \DateTime('now'));
+                                $arMasivo->setIdentificador($codigoGuia);
+                                $arMasivo->setMasivoTipoRel($arMasivoTipo);
+                                $arMasivo->setArchivo($codigoGuia . ".jpg");
+                                $arMasivo->setExtension('image/jpeg');
+                                $arMasivo->setDirectorio($arDirectorio->getDirectorio());
+                                $arMasivo->setTamano($tamano);
+                                $arMasivo->setArchivoDestino($archivoDestino);
+                                $arMasivo->setEmpresaRel($em->getReference(GenEmpresa::class, 1));
+                                $arMasivo->setUi('T');
+                                $em->persist($arMasivo);
+                                $arDirectorio->setNumeroArchivos($arDirectorio->getNumeroArchivos() + 1);
+                                $em->persist($arDirectorio);
+                                $em->flush();
+                            }
+
+                        }
+                    }
+
                     return [
                         'error' => false,
                         'respuesta' => [
