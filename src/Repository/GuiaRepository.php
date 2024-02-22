@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Archivo;
 use App\Entity\Despacho;
 use App\Entity\Guia;
 use App\Entity\Usuario;
+use App\Utilidades\S3;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -18,7 +20,6 @@ class GuiaRepository extends ServiceEntityRepository
     public function entrega($raw)
     {
         $em = $this->getEntityManager();
-        $codigoDespacho = $raw['codigoDespacho']?? null;
         $guia = $raw['codigoGuia']?? null;
         $usuario = $raw['usuario']?? null;
         $imagenes = $raw['imagenes']?? null;
@@ -34,39 +35,64 @@ class GuiaRepository extends ServiceEntityRepository
             $arGuia = $em->getRepository(Guia::class)->find($guia);
             if($arGuia) {
                 if(!$arGuia->isEstadoEntrega()) {
+                    $arGuia->setEstadoEntrega(true);
+                    //$arGuia->setFechaEntrega();
+                    $em->persist($arGuia);
                     if ($imagenes) {
-                        $directorioDestino = "/masivo/";
-                        if (file_exists($directorioDestino)) {
-                            foreach ($arrImagenes as $imagen) {
-                                $archivoDestino = rand(100000, 999999) . "_" . $codigoGuia . ".jpg";
-                                $destino = $directorio . $archivoDestino;
-                                $Base64Img = base64_decode($imagen['base64']);
-                                file_put_contents($destino, $Base64Img);
-                                $tamano = filesize($destino);
-                                $arMasivo = new DocMasivo();
-                                $arMasivo->setFecha(new \DateTime('now'));
-                                $arMasivo->setIdentificador($codigoGuia);
-                                $arMasivo->setMasivoTipoRel($arMasivoTipo);
-                                $arMasivo->setArchivo($codigoGuia . ".jpg");
-                                $arMasivo->setExtension('image/jpeg');
-                                $arMasivo->setDirectorio($arDirectorio->getDirectorio());
-                                $arMasivo->setTamano($tamano);
-                                $arMasivo->setArchivoDestino($archivoDestino);
-                                $arMasivo->setEmpresaRel($em->getReference(GenEmpresa::class, 1));
-                                $arMasivo->setUi('T');
-                                $em->persist($arMasivo);
-                                $arDirectorio->setNumeroArchivos($arDirectorio->getNumeroArchivos() + 1);
-                                $em->persist($arDirectorio);
-                                $em->flush();
+                        foreach ($imagenes as $imagen) {
+                            $data = explode(",", $imagen['base64']);
+                            $base64 = $data[1];
+                            $data = explode(":", $data[0]);
+                            $data = explode(";", $data[1]);
+                            $contentType = $data[0];
+                            $data = explode("/", $contentType);
+                            $extension = $data[1];
+                            $archivoDestino = rand(1000000, 9999999) . "_" . $guia . ".$extension";
+                            $directorio = "yodo/guia/";
+                            $s3 = new S3();
+                            $respuesta = $s3->subirB64("{$directorio}{$archivoDestino}", $base64, $contentType);
+                            if($respuesta['error'] == false) {
+                                $datos = $respuesta['datos'];
+                                $arArchivo = new Archivo();
+                                $arArchivo->setArchivoTipoId(1);
+                                $arArchivo->setCodigo($guia);
+                                $arArchivo->setNombre($archivoDestino);
+                                $arArchivo->setDirectorio($directorio);
+                                $arArchivo->setContentType($contentType);
+                                $arArchivo->setTamano($datos['tamano']);
+                                $em->persist($arArchivo);
                             }
-
                         }
                     }
-
+                    if ($firma) {
+                        $data = explode(",", $firma);
+                        $base64 = $data[1];
+                        $data = explode(":", $data[0]);
+                        $data = explode(";", $data[1]);
+                        $contentType = $data[0];
+                        $data = explode("/", $contentType);
+                        $extension = $data[1];
+                        $archivoDestino = rand(1000000, 9999999) . "_" . $guia . ".$extension";
+                        $directorio = "yodo/firma/";
+                        $s3 = new S3();
+                        $respuesta = $s3->subirB64("{$directorio}{$archivoDestino}", $base64, $contentType);
+                        if($respuesta['error'] == false) {
+                            $datos = $respuesta['datos'];
+                            $arArchivo = new Archivo();
+                            $arArchivo->setArchivoTipoId(2);
+                            $arArchivo->setCodigo($guia);
+                            $arArchivo->setNombre($archivoDestino);
+                            $arArchivo->setDirectorio($directorio);
+                            $arArchivo->setContentType($contentType);
+                            $arArchivo->setTamano($datos['tamano']);
+                            $em->persist($arArchivo);
+                        }
+                    }
+                    $em->flush();
                     return [
                         'error' => false,
                         'respuesta' => [
-                            'mensaje' => 'Guia entregada'
+                            'mensaje' => "Guia entregada"
                         ]
                     ];
                 } else {

@@ -22,6 +22,9 @@ class Guia
     #[ORM\Column(type: "datetime")]
     private $fecha = null;
 
+    #[ORM\Column(type: "datetime", nullable: true)]
+    private $fechaEntrega = null;
+
     #[ORM\Column(length: 80, nullable: true)]
     private ?string $documentoCliente = null;
 
@@ -408,6 +411,22 @@ class Guia
     public function setEstadoEntrega(bool $estadoEntrega): void
     {
         $this->estadoEntrega = $estadoEntrega;
+    }
+
+    /**
+     * @return null
+     */
+    public function getFechaEntrega()
+    {
+        return $this->fechaEntrega;
+    }
+
+    /**
+     * @param null $fechaEntrega
+     */
+    public function setFechaEntrega($fechaEntrega): void
+    {
+        $this->fechaEntrega = $fechaEntrega;
     }
 
 
