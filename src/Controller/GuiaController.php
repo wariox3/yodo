@@ -14,9 +14,9 @@ class GuiaController extends AbstractFOSRestController
     public function entrega(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
-        $guia = $raw['codigoGuia']?? null;
+        $guiaId = $raw['guiaId']?? null;
         $usuario = $raw['usuario']?? null;
-        if($guia && $usuario) {
+        if($guiaId && $usuario) {
             $arrRespuesta = $em->getRepository(Guia::class)->entrega($raw);
             if(!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);

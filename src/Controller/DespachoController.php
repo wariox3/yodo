@@ -48,4 +48,21 @@ class DespachoController extends AbstractFOSRestController
             return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
         }
     }
+
+    #[Route('/api/despacho/detalle', name: 'api_despacho_detalle')]
+    public function detalle(Request $request, EntityManagerInterface $em)
+    {
+        $raw = json_decode($request->getContent(), true);
+        $despachoId = $raw['despachoId']?? null;
+        if($despachoId) {
+            $arrRespuesta = $em->getRepository(Despacho::class)->detalle($despachoId);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
 }

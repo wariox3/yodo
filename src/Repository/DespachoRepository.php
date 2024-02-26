@@ -140,4 +140,42 @@ class DespachoRepository extends ServiceEntityRepository
             ]
         ];
     }
+
+    public function detalle($despachoId)
+    {
+        $em = $this->getEntityManager();
+        $arDespacho = $em->getRepository(Despacho::class)->find($despachoId);
+        if($arDespacho) {
+            $queryBuilder = $em->createQueryBuilder()->from(Guia::class, 'g')
+                ->select('g.id')
+                ->addSelect('g.fecha')
+                ->addSelect('g.documentoCliente')
+                ->addSelect('g.unidades')
+                ->addSelect('g.pesoReal')
+                ->addSelect('g.estadoNovedad')
+                ->addSelect('g.remitente')
+                ->addSelect('g.destinatario')
+                ->addSelect('g.destinatarioTelefono')
+                ->addSelect('g.destinatarioDireccion')
+                ->addSelect('g.vrCobroEntrega')
+                ->addSelect('g.ciudadDestinoNombre')
+                ->addSelect('g.departamentoDestinoNombre')
+                ->where("g.despachoId = " . $despachoId)
+                ->andWhere('g.estadoEntrega = false')
+                ->orderBy('g.ciudadDestinoNombre');
+            $arGuias = $queryBuilder->getQuery()->getResult();
+            return [
+                'error' => false,
+                'respuesta' => [
+                    'despachoId' => $arDespacho->getId(),
+                    'guias' => $arGuias
+                ]
+            ];
+        } else {
+            return [
+                'error' => true,
+                'errorMensaje' => "El despacho no existe"
+            ];
+        }
+    }
 }

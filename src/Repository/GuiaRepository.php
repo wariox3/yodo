@@ -20,7 +20,7 @@ class GuiaRepository extends ServiceEntityRepository
     public function entrega($raw)
     {
         $em = $this->getEntityManager();
-        $guia = $raw['codigoGuia']?? null;
+        $guiaId = $raw['guiaId']?? null;
         $usuario = $raw['usuario']?? null;
         $imagenes = $raw['imagenes']?? null;
         $ubicacion  = $raw['ubicacion']?? null;
@@ -32,7 +32,7 @@ class GuiaRepository extends ServiceEntityRepository
         $fechaEntrega = $raw['fechaEntrega'] ?? null;
         $arUsuario = $em->getRepository(Usuario::class)->find($usuario);
         if($arUsuario) {
-            $arGuia = $em->getRepository(Guia::class)->find($guia);
+            $arGuia = $em->getRepository(Guia::class)->find($guiaId);
             if($arGuia) {
                 if(!$arGuia->isEstadoEntrega()) {
                     $arGuia->setEstadoEntrega(true);
@@ -47,7 +47,7 @@ class GuiaRepository extends ServiceEntityRepository
                             $contentType = $data[0];
                             $data = explode("/", $contentType);
                             $extension = $data[1];
-                            $archivoDestino = rand(1000000, 9999999) . "_" . $guia . ".$extension";
+                            $archivoDestino = rand(1000000, 9999999) . "_" . $guiaId . ".$extension";
                             $directorio = "yodo/guia/";
                             $s3 = new S3();
                             $respuesta = $s3->subirB64("{$directorio}{$archivoDestino}", $base64, $contentType);
@@ -55,7 +55,7 @@ class GuiaRepository extends ServiceEntityRepository
                                 $datos = $respuesta['datos'];
                                 $arArchivo = new Archivo();
                                 $arArchivo->setArchivoTipoId(1);
-                                $arArchivo->setCodigo($guia);
+                                $arArchivo->setCodigo($guiaId);
                                 $arArchivo->setNombre($archivoDestino);
                                 $arArchivo->setDirectorio($directorio);
                                 $arArchivo->setContentType($contentType);
@@ -72,7 +72,7 @@ class GuiaRepository extends ServiceEntityRepository
                         $contentType = $data[0];
                         $data = explode("/", $contentType);
                         $extension = $data[1];
-                        $archivoDestino = rand(1000000, 9999999) . "_" . $guia . ".$extension";
+                        $archivoDestino = rand(1000000, 9999999) . "_" . $guiaId . ".$extension";
                         $directorio = "yodo/firma/";
                         $s3 = new S3();
                         $respuesta = $s3->subirB64("{$directorio}{$archivoDestino}", $base64, $contentType);
@@ -80,7 +80,7 @@ class GuiaRepository extends ServiceEntityRepository
                             $datos = $respuesta['datos'];
                             $arArchivo = new Archivo();
                             $arArchivo->setArchivoTipoId(2);
-                            $arArchivo->setCodigo($guia);
+                            $arArchivo->setCodigo($guiaId);
                             $arArchivo->setNombre($archivoDestino);
                             $arArchivo->setDirectorio($directorio);
                             $arArchivo->setContentType($contentType);
@@ -104,7 +104,7 @@ class GuiaRepository extends ServiceEntityRepository
             } else {
                 return [
                     'error' => true,
-                    'errorMensaje' => "La guia no existe"
+                    'errorMensaje' => "La guia {$guiaId} no existe"
                 ];
             }
         } else {
