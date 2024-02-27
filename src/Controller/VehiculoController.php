@@ -17,7 +17,7 @@ class VehiculoController extends AbstractFOSRestController
         $raw = json_decode($request->getContent(), true);
         $usuarioId = $raw['usuarioId'] ?? null;
         if ($usuarioId) {
-            $arrRespuesta = $em->getRepository(Vehiculo::class)->lista();
+            $arrRespuesta = $em->getRepository(Vehiculo::class)->lista($usuarioId);
             if (!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
             } else {
@@ -32,10 +32,19 @@ class VehiculoController extends AbstractFOSRestController
     public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
-        $modelo = $raw['modelo'] ?? null;
+        $usuarioId = $raw['usuarioId'] ?? null;
         $placa = $raw['placa'] ?? null;
-        if ($modelo && $placa) {
-            $arrRespuesta = $em->getRepository(Vehiculo::class)->nuevo($modelo, $placa);
+        $modelo = $raw['modelo'] ?? null;
+        $marcaId = $raw['marcaId'] ?? null;
+        $lineaId = $raw['lineaId'] ?? null;
+        $carroceriaId = $raw['carroceriaId'] ?? null;
+        $combustibleId = $raw['combustibleId'] ?? null;
+        $configuracionId = $raw['configuracionId'] ?? null;
+        $numeroPoliza = $raw['numeroPoliza'] ?? null;
+        $vigenciaPoliza = $raw['vigenciaPoliza'] ?? null;
+        $vigenciaRevisionTecnica = $raw['vigenciaRevisionTecnica'] ?? null;
+        if ($usuarioId && $modelo && $placa && $marcaId && $lineaId && $carroceriaId && $combustibleId && $configuracionId && $numeroPoliza && $vigenciaPoliza && $vigenciaRevisionTecnica) {
+            $arrRespuesta = $em->getRepository(Vehiculo::class)->nuevo($raw);
             if (!$arrRespuesta['error']) {
                 return $this->view($arrRespuesta['respuesta'], 200);
             } else {
