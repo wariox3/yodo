@@ -13,7 +13,7 @@ class VehiculoRepository extends ServiceEntityRepository
         parent::__construct($registry, Vehiculo::class);
     }
 
-    public function lista()
+    public function lista($usuarioId)
     {
         $em = $this->getEntityManager();
         $queryBuilder = $em->createQueryBuilder()->from(Vehiculo::class, 'v')
