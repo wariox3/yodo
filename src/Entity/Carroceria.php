@@ -20,5 +20,16 @@ class Carroceria
     #[ORM\OneToMany(targetEntity: Vehiculo::class, mappedBy: 'carroceria')]
     private Collection $vehiculos;
 
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+
 }
 

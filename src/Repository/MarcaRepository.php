@@ -20,7 +20,7 @@ class MarcaRepository extends ServiceEntityRepository
             ->select('m.id')
             ->addSelect('m.nombre');
         if($nombre) {
-            $queryBuilder->andWhere("m.nombre = '{$nombre}'");
+            $queryBuilder->andWhere("m.nombre like '%{$nombre}%'");
         }
         $arMarcas = $queryBuilder->getQuery()->getResult();
         return [
