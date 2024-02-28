@@ -13,4 +13,22 @@ class MarcaRepository extends ServiceEntityRepository
         parent::__construct($registry, Marca::class);
     }
 
+    public function buscar($nombre = null)
+    {
+        $em = $this->getEntityManager();
+        $queryBuilder = $em->createQueryBuilder()->from(Marca::class, 'm')
+            ->select('m.id')
+            ->addSelect('m.nombre');
+        if($nombre) {
+            $queryBuilder->andWhere("m.nombre = '{$nombre}'");
+        }
+        $arMarcas = $queryBuilder->getQuery()->getResult();
+        return [
+            'error' => false,
+            'respuesta' => [
+                'marcas' => $arMarcas
+            ]
+        ];
+    }
+
 }

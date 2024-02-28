@@ -22,5 +22,47 @@ class Marca
 
     #[ORM\OneToMany(targetEntity: Linea::class, mappedBy: 'marca')]
     private Collection $lineas;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+    public function getNombre(): ?string
+    {
+        return $this->nombre;
+    }
+
+    public function setNombre(?string $nombre): void
+    {
+        $this->nombre = $nombre;
+    }
+
+    public function getVehiculos(): Collection
+    {
+        return $this->vehiculos;
+    }
+
+    public function setVehiculos(Collection $vehiculos): void
+    {
+        $this->vehiculos = $vehiculos;
+    }
+
+    public function getLineas(): Collection
+    {
+        return $this->lineas;
+    }
+
+    public function setLineas(Collection $lineas): void
+    {
+        $this->lineas = $lineas;
+    }
+
+
 }
 
