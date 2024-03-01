@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class VisitaController extends AbstractFOSRestController
 {
-    #[Route('/api/visita/lista', name: 'api_visita_lista')]
+    #[Route('/api/visita/lista')]
     public function lista(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoCelda = $raw['codigoCelda']?? null;
@@ -26,7 +26,7 @@ class VisitaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/visita/nuevo', name: 'api_visita_nuevo')]
+    #[Route('/api/visita/nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoPanal = $raw['codigoPanal']?? null;
@@ -43,7 +43,7 @@ class VisitaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/visita/detalle', name: 'api_visita_detalle')]
+    #[Route('/api/visita/detalle')]
     public function visita(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoVisita = $raw['codigoVisita']?? null;
@@ -59,7 +59,7 @@ class VisitaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/visita/pendiente', name: 'api_visita_pendiente')]
+    #[Route('/api/visita/pendiente')]
     public function pendiente(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoPanal = $raw['codigoPanal']?? null;
@@ -78,7 +78,7 @@ class VisitaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/visita/autorizar', name: 'api_visita_autorizar')]
+    #[Route('/api/visita/autorizar')]
     public function autorizar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoVisita = $raw['codigoVisita']?? null;
@@ -95,7 +95,7 @@ class VisitaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/visita/cerrar', name: 'api_visita_cerrar')]
+    #[Route('/api/visita/cerrar')]
     public function cerrar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoVisita = $raw['codigoVisita']?? null;

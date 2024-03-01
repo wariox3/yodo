@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CasoController extends AbstractFOSRestController
 {
-    #[Route('/api/caso/lista', name: 'api_caso_lista')]
+    #[Route('/api/caso/lista')]
     public function lista(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoPanal = $raw['codigoPanal']?? null;
@@ -28,7 +28,7 @@ class CasoController extends AbstractFOSRestController
     }
 
 
-    #[Route('/api/caso/nuevo', name: 'api_caso_nuevo')]
+    #[Route('/api/caso/nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

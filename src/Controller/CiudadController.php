@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CiudadController extends AbstractFOSRestController
 {
-    #[Route('/api/ciudad/buscar', name: 'api_ciudad_buscar')]
+    #[Route('/api/ciudad/buscar')]
     public function buscar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $arrRespuesta = $em->getRepository(Ciudad::class)->buscar();

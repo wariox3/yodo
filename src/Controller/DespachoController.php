@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DespachoController extends AbstractFOSRestController
 {
-    #[Route('/api/despacho/lista', name: 'api_despacho_lista')]
+    #[Route('/api/despacho/lista')]
     public function lista(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -29,7 +29,7 @@ class DespachoController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/despacho/nuevo', name: 'api_despacho_nuevo')]
+    #[Route('/api/despacho/nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -49,7 +49,7 @@ class DespachoController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/despacho/detalle', name: 'api_despacho_detalle')]
+    #[Route('/api/despacho/detalle')]
     public function detalle(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

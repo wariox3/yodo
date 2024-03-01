@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class OperadorController extends AbstractFOSRestController
 {
-    #[Route('/api/operador/lista', name: 'api_operador_lista')]
+    #[Route('/api/operador/lista')]
     public function lista(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $arrRespuesta = $em->getRepository(Operador::class)->lista();
@@ -22,7 +22,7 @@ class OperadorController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/operador/nuevo', name: 'api_operador_nuevo')]
+    #[Route('/api/operador/nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

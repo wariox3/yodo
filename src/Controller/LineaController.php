@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class LineaController extends AbstractFOSRestController
 {
-    #[Route('/api/linea/buscar', name: 'api_linea_buscar')]
+    #[Route('/api/linea/buscar')]
     public function buscar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $nombre = $raw['nombre']?? null;

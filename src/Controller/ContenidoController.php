@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ContenidoController extends AbstractFOSRestController
 {
-    #[Route('/api/contenido/lista', name: 'api_contenido_lista')]
+    #[Route('/api/contenido/lista')]
     public function lista(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ReservaController extends AbstractFOSRestController
 {
-    #[Route('/api/reserva/lista', name: 'api_reserva_lista')]
+    #[Route('/api/reserva/lista')]
     public function lista(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -28,7 +28,7 @@ class ReservaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/reserva/detallelista', name: 'api_reserva_detallelista')]
+    #[Route('/api/reserva/detallelista')]
     public function detalleLista(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -45,7 +45,7 @@ class ReservaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/reserva/detallenuevo', name: 'api_reserva_detallenuevo')]
+    #[Route('/api/reserva/detallenuevo')]
     public function detalleNuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -65,7 +65,7 @@ class ReservaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/reserva/reserva', name: 'api_reserva_reserva')]
+    #[Route('/api/reserva/reserva')]
     public function reserva(Request $request, EntityManagerInterface $em)
 
     {

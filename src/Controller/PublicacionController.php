@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PublicacionController extends AbstractFOSRestController
 {
-    #[Route('/api/publicacion/lista/{codigoUsuario}/{pagina}', name: 'api_publicacion_lista', methods: ['GET'] )]
+    #[Route('/api/publicacion/lista/{codigoUsuario}/{pagina}', methods: ['GET'] )]
     public function lista(Request $request, EntityManagerInterface $em, PaginatorInterface $paginator, $codigoUsuario, $pagina = 1) {
         if($codigoUsuario) {
             $arUsuario = $em->getRepository(Usuario::class)->find($codigoUsuario);

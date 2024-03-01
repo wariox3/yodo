@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ConductorController extends AbstractFOSRestController
 {
-    #[Route('/api/conductor/lista', name: 'api_conductor_lista')]
+    #[Route('/api/conductor/lista')]
     public function lista(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -23,7 +23,7 @@ class ConductorController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/conductor/nuevo', name: 'api_conductor_nuevo')]
+    #[Route('/api/conductor/nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -43,7 +43,7 @@ class ConductorController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/conductor/detalle', name: 'api_conductor_detalle')]
+    #[Route('/api/conductor/detalle')]
     public function detalle(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -60,7 +60,7 @@ class ConductorController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/conductor/buscar', name: 'api_conductor_buscar')]
+    #[Route('/api/conductor/buscar')]
     public function buscar(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CeldaController extends AbstractFOSRestController
 {
-    #[Route('/api/panal/buscar', name: 'api_celda_buscar')]
+    #[Route('/api/panal/buscar')]
     public function buscar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoCiudad = $raw['codigoCiudad']?? null;
@@ -27,7 +27,7 @@ class CeldaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/celda/llave', name: 'api_celda_llave')]
+    #[Route('/api/celda/llave')]
     public function llave(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;
@@ -45,7 +45,7 @@ class CeldaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/celda/vincular', name: 'api_celda_vincular')]
+    #[Route('/api/celda/vincular')]
     public function vincular(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;
@@ -64,7 +64,7 @@ class CeldaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/celda/desvincular', name: 'api_celda_desvincular')]
+    #[Route('/api/celda/desvincular')]
     public function desvincular(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;

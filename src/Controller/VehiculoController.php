@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class VehiculoController extends AbstractFOSRestController
 {
-    #[Route('/api/vehiculo/lista', name: 'api_vehiculo_lista')]
+    #[Route('/api/vehiculo/lista')]
     public function lista(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -28,10 +28,12 @@ class VehiculoController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/vehiculo/nuevo', name: 'api_vehiculo_nuevo')]
+    #[Route('/api/vehiculo/nuevo', methods: ['POST', 'PUT'])]
     public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
+        $metodo = $request->getMethod();
+        $id = $raw['id'] ?? null;
         $usuarioId = $raw['usuarioId'] ?? null;
         $placa = $raw['placa'] ?? null;
         $modelo = $raw['modelo'] ?? null;
@@ -43,19 +45,23 @@ class VehiculoController extends AbstractFOSRestController
         $numeroPoliza = $raw['numeroPoliza'] ?? null;
         $vigenciaPoliza = $raw['vigenciaPoliza'] ?? null;
         $vigenciaRevisionTecnica = $raw['vigenciaRevisionTecnica'] ?? null;
-        if ($usuarioId && $modelo && $placa && $marcaId && $lineaId && $carroceriaId && $combustibleId && $configuracionId && $numeroPoliza && $vigenciaPoliza && $vigenciaRevisionTecnica) {
-            $arrRespuesta = $em->getRepository(Vehiculo::class)->nuevo($raw);
-            if (!$arrRespuesta['error']) {
-                return $this->view($arrRespuesta['respuesta'], 200);
-            } else {
-                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
-            }
+        if($metodo == 'PUT' && $id == null) {
+            return $this->view(['mensaje' => 'Para el metodo PUT debe enviarse el id'], 400);
         } else {
-            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+            if ($usuarioId && $modelo && $placa && $marcaId && $lineaId && $carroceriaId && $combustibleId && $configuracionId && $numeroPoliza && $vigenciaPoliza && $vigenciaRevisionTecnica) {
+                $arrRespuesta = $em->getRepository(Vehiculo::class)->nuevo($raw);
+                if (!$arrRespuesta['error']) {
+                    return $this->view($arrRespuesta['respuesta'], 200);
+                } else {
+                    return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
+                }
+            } else {
+                return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+            }
         }
     }
 
-    #[Route('/api/vehiculo/detalle', name: 'api_vehiculo_detalle')]
+    #[Route('/api/vehiculo/detalle')]
     public function detalle(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -72,7 +78,7 @@ class VehiculoController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/vehiculo/buscar', name: 'api_vehiculo_buscar')]
+    #[Route('/api/vehiculo/buscar')]
     public function buscar(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

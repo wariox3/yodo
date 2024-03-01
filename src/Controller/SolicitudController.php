@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SolicitudController extends AbstractFOSRestController
 {
-    #[Route('/api/solicitud/pendiente', name: 'api_solicitud_pendiente')]
+    #[Route('/api/solicitud/pendiente')]
     public function pendiente(EntityManagerInterface $em) {
         $arrRespuesta = $em->getRepository(Solicitud::class)->pendiente();
         if(!$arrRespuesta['error']) {
@@ -20,7 +20,7 @@ class SolicitudController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/solicitud/aplicar', name: 'api_solicitud_aplicar')]
+    #[Route('/api/solicitud/aplicar')]
     public function aplicar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;
@@ -37,7 +37,7 @@ class SolicitudController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/solicitud/asignar', name: 'api_solicitud_asignar')]
+    #[Route('/api/solicitud/asignar')]
     public function asignar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;

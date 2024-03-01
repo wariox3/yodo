@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MarcaController extends AbstractFOSRestController
 {
-    #[Route('/api/marca/buscar', name: 'api_marca_buscar')]
+    #[Route('/api/marca/buscar')]
     public function buscar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $nombre = $raw['nombre']?? null;

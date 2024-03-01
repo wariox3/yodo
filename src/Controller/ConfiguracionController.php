@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ConfiguracionController extends AbstractFOSRestController
 {
-    #[Route('/api/configuracion/lista', name: 'api_configuracion_lista')]
+    #[Route('/api/configuracion/lista')]
     public function lista(Request $request, EntityManagerInterface $em)
     {
         $arrRespuesta = $em->getRepository(Configuracion::class)->lista();

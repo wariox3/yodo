@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class GuiaController extends AbstractFOSRestController
 {
-    #[Route('/api/guia/entrega', name: 'api_guia_entrega')]
+    #[Route('/api/guia/entrega')]
     public function entrega(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

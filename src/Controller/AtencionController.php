@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class AtencionController extends AbstractFOSRestController
 {
-    #[Route('/api/atencion/lista', name: 'api_atencion_lista')]
+    #[Route('/api/atencion/lista')]
     public function lista(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -28,7 +28,7 @@ class AtencionController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/atencion/nuevo', name: 'api_atencion_nuevo')]
+    #[Route('/api/atencion/nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -47,7 +47,7 @@ class AtencionController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/atencion/pendiente', name: 'api_atencion_pendiente')]
+    #[Route('/api/atencion/pendiente')]
     public function pendiente(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);
@@ -65,7 +65,7 @@ class AtencionController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/atencion/atendido', name: 'api_atencion_atendido')]
+    #[Route('/api/atencion/atendido')]
     public function atendido(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

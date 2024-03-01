@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SoporteController extends AbstractFOSRestController
 {
-    #[Route('/api/soporte/nuevo', name: 'api_soporte_nuevo')]
+    #[Route('/api/soporte/nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em)
     {
         $raw = json_decode($request->getContent(), true);

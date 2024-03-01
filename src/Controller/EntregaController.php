@@ -14,7 +14,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EntregaController extends AbstractFOSRestController
 {
-    #[Route('/api/entrega/lista', name: 'api_entrega_lista')]
+    #[Route('/api/entrega/lista')]
     public function lista(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoCelda = $raw['codigoCelda']?? null;
@@ -30,7 +30,7 @@ class EntregaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/entrega/nuevo', name: 'api_entrega_nuevo')]
+    #[Route('/api/entrega/nuevo')]
     public function nuevo(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoPanal = $raw['codigoPanal']?? null;
@@ -48,7 +48,7 @@ class EntregaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/entrega/detalle', name: 'api_entrega_detalle')]
+    #[Route('/api/entrega/detalle')]
     public function detalle(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoEntrega = $raw['codigoEntrega']?? null;
@@ -64,7 +64,7 @@ class EntregaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/entrega/pendiente', name: 'api_entrega_pendiente')]
+    #[Route('/api/entrega/pendiente')]
     public function pendiente(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoPanal = $raw['codigoPanal']?? null;
@@ -81,7 +81,7 @@ class EntregaController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/entrega/entrega', name: 'api_entrega_entrega')]
+    #[Route('/api/entrega/entrega')]
     public function entrega(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoEntrega = $raw['codigoEntrega']?? null;

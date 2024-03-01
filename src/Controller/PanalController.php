@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class PanalController extends AbstractFOSRestController
 {
-    #[Route('/api/panal/buscar', name: 'api_panal_buscar')]
+    #[Route('/api/panal/buscar')]
     public function buscar(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoCiudad = $raw['codigoCiudad']?? null;
@@ -26,7 +26,7 @@ class PanalController extends AbstractFOSRestController
         }
     }
 
-    #[Route('/api/panal/vincular', name: 'api_panal_vincular')]
+    #[Route('/api/panal/vincular')]
     public function vincular(Request $request, EntityManagerInterface $em) {
         $raw = json_decode($request->getContent(), true);
         $codigoUsuario = $raw['codigoUsuario']?? null;
