@@ -94,6 +94,9 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Vehiculo::class, mappedBy: 'usuario')]
     private Collection $vehiculos;
 
+    #[ORM\OneToMany(targetEntity: CambioClave::class, mappedBy: 'usuario')]
+    private Collection $cambiosClave;
+
     /**
      * @var string The hashed password
      */
@@ -502,6 +505,16 @@ class Usuario implements UserInterface, PasswordAuthenticatedUserInterface
     public function setVehiculos(Collection $vehiculos): void
     {
         $this->vehiculos = $vehiculos;
+    }
+
+    public function getCambiosClave(): Collection
+    {
+        return $this->cambiosClave;
+    }
+
+    public function setCambiosClave(Collection $cambiosClave): void
+    {
+        $this->cambiosClave = $cambiosClave;
     }
 
 

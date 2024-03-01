@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\CambioClave;
 use App\Entity\Usuario;
 use App\Utilidades\Zinc;
 use Doctrine\ORM\EntityManagerInterface;
@@ -70,8 +71,16 @@ class UsuarioController extends AbstractFOSRestController
         if($usuario) {
             $arUsuario = $em->getRepository(Usuario::class)->findOneBy(['username' => $usuario]);
             if($arUsuario) {
+                $codigo = mt_rand(100000, 999999);
+                $arCambioClave = new CambioClave();
+                $arCambioClave->setUsuario($arUsuario);
+                $arCambioClave->setCodigo($codigo);
+                $arCambioClave->setFecha(new \DateTime('now'));
+                $arCambioClave->setEstadoAplicado(false);
+                $em->persist($arCambioClave);
+                $em->flush();
                 $zinc = new Zinc();
-                $zinc->enviarCorreoSemantica("Recuperar clave","Para recuperar la clave por favor siga este link <a href='#'>Texto_del_enlace</a>", $usuario);
+                $zinc->enviarCorreoSemantica("Recuperar clave","Se genero un codigo para recuperar la clave: {$codigo}", $usuario);
                 return $this->view(['mensaje' => 'Se envia correo recuperacion'], 200);
             } else {
                 return $this->view(['mensaje' => 'El usuario no existe'], 400);
@@ -81,5 +90,32 @@ class UsuarioController extends AbstractFOSRestController
         }
     }
 
+    #[Route('/api/usuario/cambio_clave')]
+    public function cambioClave(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher) {
+        $raw = json_decode($request->getContent(), true);
+        $codigo = $raw['codigo']?? null;
+        $nuevaClave = $raw['nuevaClave']?? null;
+        if($codigo && $nuevaClave) {
+            $arCambioClave = $em->getRepository(CambioClave::class)->findOneBy(['codigo' => $codigo]);
+            if($arCambioClave) {
+                if($arCambioClave->isEstadoAplicado() == false) {
+                    $arCambioClave->setEstadoAplicado(true);
+                    $em->persist($arCambioClave);
+                    $arUsuario = $em->getRepository(Usuario::class)->find($arCambioClave->getUsuarioId());
+                    $hashedPassword = $passwordHasher->hashPassword($arUsuario, $nuevaClave);
+                    $arUsuario->setPassword($hashedPassword);
+                    $em->persist($arUsuario);
+                    $em->flush();
+                    return $this->view(['mensaje' => 'Se cambio la clave con exito'], 200);
+                } else {
+                    return $this->view(['mensaje' => 'El codigo ya fue usado para restablecer la clave'], 400);
+                }
+            } else {
+                return $this->view(['mensaje' => 'El codigo es incorrecto'], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
 
 }
