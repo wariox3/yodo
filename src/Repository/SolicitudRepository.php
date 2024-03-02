@@ -2,6 +2,8 @@
 
 namespace App\Repository;
 
+use App\Entity\Carroceria;
+use App\Entity\Ciudad;
 use App\Entity\Solicitud;
 use App\Entity\SolicitudAplicacion;
 use App\Entity\Usuario;
@@ -16,6 +18,76 @@ class SolicitudRepository extends ServiceEntityRepository
         parent::__construct($registry, Solicitud::class);
     }
 
+    public function nuevo($raw)
+    {
+        $em = $this->getEntityManager();
+        $id = $raw['id'] ?? null;
+        $usuarioId = $raw['usuarioId']?? null;
+        $ciudadOrigenId = $raw['ciudadOrigenId']?? null;
+        $ciudadDestinoId = $raw['ciudadDestinoId']?? null;
+        $carroceriaId = $raw['carroceriaId']?? null;
+        $precio = $raw['precio']?? 0;
+        $peso = $raw['peso']?? 0;
+        $volumen = $raw['volumen']?? 0;
+        $entregas = $raw['entregas']?? 0;
+        $arUsuario = $em->getRepository(Usuario::class)->find($usuarioId);
+        if($arUsuario) {
+            $arCarroceria = $em->getRepository(Carroceria::class)->find($carroceriaId);
+            if($arCarroceria) {
+                $arCiudadOrigen = $em->getRepository(Ciudad::class)->find($ciudadOrigenId);
+                if($arCiudadOrigen) {
+                    $arCiudadDestino = $em->getRepository(Ciudad::class)->find($ciudadDestinoId);
+                    if($arCiudadDestino) {
+                        if($id) {
+                            $arSolicitud = $em->getRepository(Solicitud::class)->find($id);
+                        } else {
+                            $arSolicitud = new Solicitud();
+                        }
+                        $arSolicitud->setFecha(new \DateTime('now'));
+                        $arSolicitud->setUsuario($arUsuario);
+                        $arSolicitud->setCarroceria($arCarroceria);
+                        $arSolicitud->setCiudadOrigen($arCiudadOrigen);
+                        $arSolicitud->setCiudadDestino($arCiudadDestino);
+                        $arSolicitud->setPrecio($precio);
+                        $arSolicitud->setPeso($peso);
+                        $arSolicitud->setVolumen($volumen);
+                        $arSolicitud->setEntregas($entregas);
+                        $em->persist($arSolicitud);
+                        $em->flush();
+                        return [
+                            'error' => false,
+                            'respuesta' => [
+                                'id' => $arSolicitud->getId(),
+                            ]
+                        ];
+                    } else {
+                        return [
+                            'error' => true,
+                            'errorMensaje' => "No existe la ciudad destino"
+                        ];
+                    }
+                } else {
+                    return [
+                        'error' => true,
+                        'errorMensaje' => "No existe la ciudad origen"
+                    ];
+                }
+            } else {
+                return [
+                    'error' => true,
+                    'errorMensaje' => "No existe la carroceria"
+                ];
+            }
+        } else {
+            return [
+                'error' => true,
+                'errorMensaje' => "No existe el usuario"
+            ];
+        }
+
+
+    }
+
     public function pendiente()
     {
         $em = $this->getEntityManager();
@@ -24,6 +96,16 @@ class SolicitudRepository extends ServiceEntityRepository
             ->addSelect('s.fecha')
             ->addSelect('s.descripcion')
             ->addSelect('s.usuarioId')
+            ->addSelect('s.precio')
+            ->addSelect('s.peso')
+            ->addSelect('s.volumen')
+            ->addSelect('s.entregas')
+            ->addSelect('ca.nombre as carroceriaNombre')
+            ->addSelect('origen.nombre as ciudadOrigenNombre')
+            ->addSelect('destino.nombre as ciudadDestinoNombre')
+            ->leftJoin('s.carroceria', 'ca')
+            ->leftJoin('s.ciudadOrigen', 'origen')
+            ->leftJoin('s.ciudadDestino', 'destino')
             ->where("s.estadoAsignado = false");
         $arSolicitudes = $queryBuilder->getQuery()->getResult();
         return [
