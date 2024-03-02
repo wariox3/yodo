@@ -33,5 +33,6 @@ security:
     access_control:
         - { path: ^/api/usuario/registro, roles: PUBLIC_ACCESS  }
         - { path: ^/api/usuario/recuperar_clave, roles: PUBLIC_ACCESS  }
+        - { path: ^/api/usuario/cambio_clave, roles: PUBLIC_ACCESS  }
         - { path: ^/api/login, roles: PUBLIC_ACCESS  }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }
