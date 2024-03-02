@@ -20,8 +20,29 @@ class Solicitud
     #[ORM\Column(type: "datetime")]
     private $fecha = null;
 
+    #[ORM\Column(type: "integer")]
+    private $ciudadOrigenId;
+
+    #[ORM\Column(type: "integer")]
+    private $ciudadDestinoId;
+
     #[ORM\Column(length: 200, nullable: true)]
     private $descripcion = null;
+
+    #[ORM\Column(type: "float", options: ["default" => 0])]
+    private $precio = 0.0;
+
+    #[ORM\Column(type: "float", options: ["default" => 0])]
+    private $peso = 0.0;
+
+    #[ORM\Column(type: "float", options: ["default" => 0])]
+    private $volumen = 0.0;
+
+    #[ORM\Column(type: "integer", options: ["default" => 0])]
+    private $entregas = 0;
+
+    #[ORM\Column(type: 'integer')]
+    private $carroceriaId;
 
     #[ORM\Column(type: "integer")]
     private $usuarioId;
@@ -39,6 +60,18 @@ class Solicitud
     #[ORM\ManyToOne(targetEntity: Usuario::class, inversedBy: 'solicitudesUsuarioAsignado')]
     #[ORM\JoinColumn(name: "usuario_asignado_id", referencedColumnName: "id")]
     private $usuarioAsignado;
+
+    #[ORM\ManyToOne(targetEntity: Carroceria::class, inversedBy: 'solicitudes')]
+    #[ORM\JoinColumn(name: "carroceria_id", referencedColumnName: "id")]
+    private $carroceria;
+
+    #[ORM\ManyToOne(targetEntity: Ciudad::class, inversedBy: 'solicitudesCiudadOrigen')]
+    #[ORM\JoinColumn(name: "ciudad_origen_id", referencedColumnName: "id")]
+    private $ciudadOrigen;
+
+    #[ORM\ManyToOne(targetEntity: Ciudad::class, inversedBy: 'solicitudesCiudadDestino')]
+    #[ORM\JoinColumn(name: "ciudad_destino_id", referencedColumnName: "id")]
+    private $ciudadDestino;
 
     #[ORM\OneToMany(targetEntity: SolicitudAplicacion::class, mappedBy: 'solicitud')]
     private Collection $solicitudesAplicaciones;
@@ -185,6 +218,166 @@ class Solicitud
     public function setSolicitudesAplicaciones(Collection $solicitudesAplicaciones): void
     {
         $this->solicitudesAplicaciones = $solicitudesAplicaciones;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCiudadOrigenId()
+    {
+        return $this->ciudadOrigenId;
+    }
+
+    /**
+     * @param mixed $ciudadOrigenId
+     */
+    public function setCiudadOrigenId($ciudadOrigenId): void
+    {
+        $this->ciudadOrigenId = $ciudadOrigenId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCiudadDestinoId()
+    {
+        return $this->ciudadDestinoId;
+    }
+
+    /**
+     * @param mixed $ciudadDestinoId
+     */
+    public function setCiudadDestinoId($ciudadDestinoId): void
+    {
+        $this->ciudadDestinoId = $ciudadDestinoId;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPrecio(): float
+    {
+        return $this->precio;
+    }
+
+    /**
+     * @param float $precio
+     */
+    public function setPrecio(float $precio): void
+    {
+        $this->precio = $precio;
+    }
+
+    /**
+     * @return float
+     */
+    public function getPeso(): float
+    {
+        return $this->peso;
+    }
+
+    /**
+     * @param float $peso
+     */
+    public function setPeso(float $peso): void
+    {
+        $this->peso = $peso;
+    }
+
+    /**
+     * @return float
+     */
+    public function getVolumen(): float
+    {
+        return $this->volumen;
+    }
+
+    /**
+     * @param float $volumen
+     */
+    public function setVolumen(float $volumen): void
+    {
+        $this->volumen = $volumen;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEntregas(): int
+    {
+        return $this->entregas;
+    }
+
+    /**
+     * @param int $entregas
+     */
+    public function setEntregas(int $entregas): void
+    {
+        $this->entregas = $entregas;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCarroceriaId()
+    {
+        return $this->carroceriaId;
+    }
+
+    /**
+     * @param mixed $carroceriaId
+     */
+    public function setCarroceriaId($carroceriaId): void
+    {
+        $this->carroceriaId = $carroceriaId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCarroceria()
+    {
+        return $this->carroceria;
+    }
+
+    /**
+     * @param mixed $carroceria
+     */
+    public function setCarroceria($carroceria): void
+    {
+        $this->carroceria = $carroceria;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCiudadOrigen()
+    {
+        return $this->ciudadOrigen;
+    }
+
+    /**
+     * @param mixed $ciudadOrigen
+     */
+    public function setCiudadOrigen($ciudadOrigen): void
+    {
+        $this->ciudadOrigen = $ciudadOrigen;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCiudadDestino()
+    {
+        return $this->ciudadDestino;
+    }
+
+    /**
+     * @param mixed $ciudadDestino
+     */
+    public function setCiudadDestino($ciudadDestino): void
+    {
+        $this->ciudadDestino = $ciudadDestino;
     }
 
 

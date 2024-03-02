@@ -14,21 +14,33 @@ class Ciudad
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 80)]
+    #[ORM\Column(length: 100)]
     private ?string $nombre = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
+    #[ORM\Column(length: 10)]
+    private ?string $codigoDane = null;
+
+    #[ORM\Column(length: 10)]
+    private ?string $codigoPostal = null;
+
+    #[ORM\Column(type: "integer")]
     private $estadoId;
 
     #[ORM\ManyToOne(targetEntity: Estado::class, inversedBy: 'ciudades')]
     #[ORM\JoinColumn(name: "estado_id", referencedColumnName: "id")]
     private $estado;
 
-    #[ORM\OneToMany(targetEntity: Ciudad::class, mappedBy: 'ciudad')]
+    #[ORM\OneToMany(targetEntity: Usuario::class, mappedBy: 'ciudad')]
     private Collection $usuarios;
 
-    #[ORM\OneToMany(targetEntity: Ciudad::class, mappedBy: 'ciudad')]
+    #[ORM\OneToMany(targetEntity: Panal::class, mappedBy: 'ciudad')]
     private Collection $panales;
+
+    #[ORM\OneToMany(targetEntity: Solicitud::class, mappedBy: 'ciudadOrigen')]
+    private Collection $solicitudesCiudadOrigen;
+
+    #[ORM\OneToMany(targetEntity: Solicitud::class, mappedBy: 'ciudadDestino')]
+    private Collection $solicitudesCiudadDestino;
 
     /**
      * @return int|null
@@ -63,6 +75,38 @@ class Ciudad
     }
 
     /**
+     * @return string|null
+     */
+    public function getCodigoDane(): ?string
+    {
+        return $this->codigoDane;
+    }
+
+    /**
+     * @param string|null $codigoDane
+     */
+    public function setCodigoDane(?string $codigoDane): void
+    {
+        $this->codigoDane = $codigoDane;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCodigoPostal(): ?string
+    {
+        return $this->codigoPostal;
+    }
+
+    /**
+     * @param string|null $codigoPostal
+     */
+    public function setCodigoPostal(?string $codigoPostal): void
+    {
+        $this->codigoPostal = $codigoPostal;
+    }
+
+    /**
      * @return mixed
      */
     public function getEstadoId()
@@ -76,6 +120,22 @@ class Ciudad
     public function setEstadoId($estadoId): void
     {
         $this->estadoId = $estadoId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEstado()
+    {
+        return $this->estado;
+    }
+
+    /**
+     * @param mixed $estado
+     */
+    public function setEstado($estado): void
+    {
+        $this->estado = $estado;
     }
 
     /**
@@ -111,20 +171,39 @@ class Ciudad
     }
 
     /**
-     * @return mixed
+     * @return Collection
      */
-    public function getEstado()
+    public function getSolicitudesCiudadOrigen(): Collection
     {
-        return $this->estado;
+        return $this->solicitudesCiudadOrigen;
     }
 
     /**
-     * @param mixed $estado
+     * @param Collection $solicitudesCiudadOrigen
      */
-    public function setEstado($estado): void
+    public function setSolicitudesCiudadOrigen(Collection $solicitudesCiudadOrigen): void
     {
-        $this->estado = $estado;
+        $this->solicitudesCiudadOrigen = $solicitudesCiudadOrigen;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getSolicitudesCiudadDestino(): Collection
+    {
+        return $this->solicitudesCiudadDestino;
+    }
+
+    /**
+     * @param Collection $solicitudesCiudadDestino
+     */
+    public function setSolicitudesCiudadDestino(Collection $solicitudesCiudadDestino): void
+    {
+        $this->solicitudesCiudadDestino = $solicitudesCiudadDestino;
+    }
+
+
+
 
 
 }

@@ -17,8 +17,11 @@ class Estado
     #[ORM\Column(length: 80)]
     private ?string $nombre = null;
 
-    #[ORM\Column(type: "integer", nullable: true)]
+    #[ORM\Column(type: "integer")]
     private $paisId;
+
+    #[ORM\Column(length: 10)]
+    private ?string $codigoDane = null;
 
     #[ORM\ManyToOne(targetEntity: Pais::class, inversedBy: 'estados')]
     #[ORM\JoinColumn(name: "pais_id", referencedColumnName: "id")]
@@ -76,19 +79,19 @@ class Estado
     }
 
     /**
-     * @return Collection
+     * @return string|null
      */
-    public function getCiudades(): Collection
+    public function getCodigoDane(): ?string
     {
-        return $this->ciudades;
+        return $this->codigoDane;
     }
 
     /**
-     * @param Collection $ciudades
+     * @param string|null $codigoDane
      */
-    public function setCiudades(Collection $ciudades): void
+    public function setCodigoDane(?string $codigoDane): void
     {
-        $this->ciudades = $ciudades;
+        $this->codigoDane = $codigoDane;
     }
 
     /**
@@ -105,6 +108,22 @@ class Estado
     public function setPais($pais): void
     {
         $this->pais = $pais;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCiudades(): Collection
+    {
+        return $this->ciudades;
+    }
+
+    /**
+     * @param Collection $ciudades
+     */
+    public function setCiudades(Collection $ciudades): void
+    {
+        $this->ciudades = $ciudades;
     }
 
 
