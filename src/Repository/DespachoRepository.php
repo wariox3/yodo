@@ -161,6 +161,9 @@ class DespachoRepository extends ServiceEntityRepository
                 ->addSelect('g.vrCobroEntrega')
                 ->addSelect('g.ciudadDestinoNombre')
                 ->addSelect('g.departamentoDestinoNombre')
+                ->addSelect('g.entregaRequiereDatos')
+                ->addSelect('g.entregaRequiereFirma')
+                ->addSelect('g.entregaRequiereFoto')
                 ->where("g.despachoId = " . $despachoId)
                 ->andWhere('g.estadoEntrega = false')
                 ->orderBy('g.ciudadDestinoNombre');
