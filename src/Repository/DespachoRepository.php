@@ -148,6 +148,7 @@ class DespachoRepository extends ServiceEntityRepository
         if($arDespacho) {
             $queryBuilder = $em->createQueryBuilder()->from(Guia::class, 'g')
                 ->select('g.id')
+                ->addSelect('g.codigo')
                 ->addSelect('g.fecha')
                 ->addSelect('g.documentoCliente')
                 ->addSelect('g.unidades')
