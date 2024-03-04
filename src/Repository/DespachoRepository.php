@@ -171,7 +171,10 @@ class DespachoRepository extends ServiceEntityRepository
             return [
                 'error' => false,
                 'respuesta' => [
-                    'despachoId' => $arDespacho->getId(),
+                    'despacho' => [
+                        'id' => $arDespacho->getId(),
+                        'codigo' => $arDespacho->getCodigo()
+                    ],
                     'guias' => $arGuias
                 ]
             ];
