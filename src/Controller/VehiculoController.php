@@ -49,7 +49,7 @@ class VehiculoController extends AbstractFOSRestController
             return $this->view(['mensaje' => 'Para el metodo PUT debe enviarse el id'], 400);
         } else {
             if ($usuarioId && $modelo && $placa && $marcaId && $lineaId && $carroceriaId && $combustibleId && $configuracionId && $numeroPoliza && $vigenciaPoliza && $vigenciaRevisionTecnica) {
-                $arrRespuesta = $em->getRepository(Vehiculo::class)->nuevo($raw);
+                $arrRespuesta = $em->getRepository(Vehiculo::class)->nuevo($raw, $metodo);
                 if (!$arrRespuesta['error']) {
                     return $this->view($arrRespuesta['respuesta'], 200);
                 } else {

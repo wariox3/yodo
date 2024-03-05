@@ -36,7 +36,7 @@ class VehiculoRepository extends ServiceEntityRepository
         ];
     }
 
-    public function nuevo($raw)
+    public function nuevo($raw, $metodo)
     {
         $em = $this->getEntityManager();
         $id = $raw['id'] ?? null;
@@ -64,7 +64,7 @@ class VehiculoRepository extends ServiceEntityRepository
                         if($arCombustible) {
                             $arConfiguracion = $em->getRepository(Configuracion::class)->find($configuracionId);
                             if($arConfiguracion) {
-                                if($id) {
+                                if($metodo == 'PUT') {
                                     $arVehiculo = $em->getRepository(Vehiculo::class)->find($id);
                                 } else {
                                     $arVehiculo = new Vehiculo();
