@@ -7,7 +7,7 @@ nelmio_cors:
         expose_headers: []
         max_age: 3600
         hosts: ['*']
-        origin_regex: false
+        origin_regex: true
         forced_allow_origin_value: ~
         skip_same_as_origin: true
     paths:
