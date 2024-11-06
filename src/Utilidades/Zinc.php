@@ -4,20 +4,16 @@ namespace App\Utilidades;
 
 class Zinc
 {
-    private $urlBase = "http://zinc.semantica.com.co/index.php";
+    private $urlBase = "http://zinc.semantica.com.co";
 
     public function __construct(){
 
     }
 
-    public function enviarCorreoSemantica($asunto, $htmlContenido, $correo) {
-        $datos = [
-            "correo" => $correo,
-            "asunto" => $asunto,
-            "contenido" => $htmlContenido];
-        $this->consumoPost("/api/sendgrid/correo", $datos);
+    public function correoHtml($datos) {
+        $respuesta = $this->consumoPost("/api/correo/html", $datos);
+        return $respuesta;
     }
-
     private function consumoPost($url, $datos) {
         $urlCompleta = $this->urlBase . $url;
         $datosJson = json_encode($datos);

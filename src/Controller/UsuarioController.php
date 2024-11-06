@@ -79,8 +79,19 @@ class UsuarioController extends AbstractFOSRestController
                 $arCambioClave->setEstadoAplicado(false);
                 $em->persist($arCambioClave);
                 $em->flush();
+
+                $html = $this->renderView('correo/usuario/recuperarClave.html.twig', [
+                    'usuario' => $usuario,
+                    'codigo' => $codigo
+                ]);
+                $datos = [
+                    "nombreRemitente" => "Veeci",
+                    "correo" => $usuario,
+                    "asunto" => "Codigo recuperacion clave",
+                    "contenido" => $html
+                ];
                 $zinc = new Zinc();
-                $zinc->enviarCorreoSemantica("Recuperar clave","Se genero un codigo para recuperar la clave: {$codigo}", $usuario);
+                $zinc->correoHtml($datos);
                 return $this->view(['mensaje' => 'Se envia correo recuperacion'], 200);
             } else {
                 return $this->view(['mensaje' => 'El usuario no existe'], 400);
