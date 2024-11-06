@@ -2,8 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Ciudad;
-use App\Entity\Panal;
 use App\Entity\Publicacion;
 use App\Entity\Usuario;
 use Doctrine\ORM\EntityManagerInterface;
@@ -30,6 +28,23 @@ class PublicacionController extends AbstractFOSRestController
                 }
             } else {
                 return $this->view(['mensaje' => 'El usuario no existe'], 400);
+            }
+        } else {
+            return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);
+        }
+    }
+
+    #[Route('/api/publicacion/nuevo')]
+    public function nuevo(Request $request, EntityManagerInterface $em) {
+        $raw = json_decode($request->getContent(), true);
+        $usuario = $raw['codigoUsuario']?? null;
+        $imagen = $raw['imagenBase64']?? null;
+        if($usuario && $imagen) {
+            $arrRespuesta = $em->getRepository(Publicacion::class)->nuevo($raw);
+            if(!$arrRespuesta['error']) {
+                return $this->view($arrRespuesta['respuesta'], 200);
+            } else {
+                return $this->view(['mensaje' => $arrRespuesta['errorMensaje']], 400);
             }
         } else {
             return $this->view(['mensaje' => 'Faltan datos para el consumo de la API'], 400);

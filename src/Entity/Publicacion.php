@@ -27,10 +27,10 @@ class Publicacion
     private ?string $urlImagen = null;
 
     #[ORM\Column(type: "smallint", options: ["default" => 0])]
-    private $reacciones;
+    private $reacciones = 0;
 
     #[ORM\Column(type: "smallint", options: ["default" => 0])]
-    private $comentarios;
+    private $comentarios = 0;
 
     #[ORM\Column(type: "boolean", options: ["default" => true])]
     private $estadoAprobado = true;
