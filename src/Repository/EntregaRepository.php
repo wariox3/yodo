@@ -8,17 +8,19 @@ use App\Entity\Entrega;
 use App\Entity\EntregaTipo;
 use App\Entity\Panal;
 use App\Entity\Usuario;
+use App\Utilidades\BackBlaze;
 use App\Utilidades\Firebase;
-use App\Utilidades\SpaceDO;
+use App\Utilidades\General;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class EntregaRepository extends ServiceEntityRepository
 {
-
-    public function __construct(ManagerRegistry $registry)
+    private $general;
+    public function __construct(ManagerRegistry $registry, General $general)
     {
         parent::__construct($registry, Entrega::class);
+        $this->general = $general;
     }
 
     public function lista($codigoCelda) {
@@ -29,7 +31,7 @@ class EntregaRepository extends ServiceEntityRepository
             ->addSelect('e.descripcion')
             ->addSelect('e.entregaTipoId')
             ->addSelect('e.estadoEntregado')
-            ->addSelect("CONCAT('{$_ENV['ALMACENAMIENTO_URL']}', e.urlImagenIngreso) as urlImagenIngreso")
+            ->addSelect("CONCAT('{$_ENV['B2_RUTA']}', e.urlImagenIngreso) as urlImagenIngreso")
             ->addSelect('et.nombre as entregaTipoNombre')
             ->leftJoin('e.entregaTipo', 'et')
             ->where("e.celdaId = {$codigoCelda}")
@@ -59,13 +61,19 @@ class EntregaRepository extends ServiceEntityRepository
                 $arEntrega->setCelda($arCelda);
                 $arEntrega->setFechaIngreso(new \DateTime('now'));
                 $arEntrega->setEntregaTipo($em->getReference(EntregaTipo::class, $codigoEntregaTipo));
-                if($imagen) {
-                    $spaceDO = new SpaceDO();
-                    $respuesta = $spaceDO->subirB64('entrega', $imagen);
-                    $arEntrega->setUrlImagenIngreso($respuesta['url']);
-                }
                 $em->persist($arEntrega);
                 $em->flush();
+                if($imagen) {
+                    $partesArchivo = $this->general->desfragmentarArchivoBase64($imagen);
+                    $dataBinario = base64_decode($partesArchivo['base64']);
+                    $nombre = "entrega/{$arEntrega->getId()}.{$partesArchivo['extension']}";
+                    $backBlaze = new BackBlaze();
+                    $backBlaze->subirB64($nombre, $dataBinario, $partesArchivo['mimeType']);
+                    $arEntrega->setUrlImagenIngreso("{$_ENV['B2_BUCKET_NAME']}/{$nombre}");
+                    $em->persist($arEntrega);
+                    $em->flush();
+                }
+
 
                 //Usuarios a los que se debe notificar
                 $firebase = new Firebase();
@@ -101,7 +109,7 @@ class EntregaRepository extends ServiceEntityRepository
             ->addSelect('e.fechaIngreso')
             ->addSelect('e.entregaTipoId')
             ->addSelect('e.descripcion')
-            ->addSelect("CONCAT('{$_ENV['ALMACENAMIENTO_URL']}', e.urlImagenIngreso) as urlImagenIngreso")
+            ->addSelect("CONCAT('{$_ENV['B2_RUTA']}', e.urlImagenIngreso) as urlImagenIngreso")
             ->addSelect('c.celda')
             ->addSelect('et.nombre as entregaTipoNombre')
             ->leftJoin('e.celda', 'c')

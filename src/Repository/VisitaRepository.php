@@ -7,16 +7,19 @@ use App\Entity\CeldaUsuario;
 use App\Entity\Panal;
 use App\Entity\Usuario;
 use App\Entity\Visita;
+use App\Utilidades\BackBlaze;
 use App\Utilidades\Firebase;
-use App\Utilidades\SpaceDO;
+use App\Utilidades\General;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class VisitaRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private $general;
+    public function __construct(ManagerRegistry $registry, General $general)
     {
         parent::__construct($registry, Visita::class);
+        $this->general = $general;
     }
 
     public function lista($codigoCelda)
@@ -30,7 +33,7 @@ class VisitaRepository extends ServiceEntityRepository
             ->addSelect('v.placa')
             ->addSelect('v.estadoAutorizado')
             ->addSelect('v.codigoIngreso')
-            ->addSelect("CONCAT('{$_ENV['ALMACENAMIENTO_URL']}', v.urlImagenIngreso) as urlImagenIngreso")
+            ->addSelect("CONCAT('{$_ENV['B2_RUTA']}', v.urlImagenIngreso) as urlImagenIngreso")
             ->where("v.celdaId = {$codigoCelda}")
             ->orderBy('v.fecha', 'DESC');
         $arVisitas = $queryBuilder->getQuery()->getResult();
@@ -64,13 +67,19 @@ class VisitaRepository extends ServiceEntityRepository
                 $arVisita->setNombre($nombre);
                 $arVisita->setPlaca($placa);
                 $arVisita->setCodigoIngreso($codigo);
-                if($imagen) {
-                    $spaceDO = new SpaceDO();
-                    $archivo = $spaceDO->subirB64('visita', $imagen);
-                    $arVisita->setUrlImagenIngreso($archivo['url']);
-                }
                 $em->persist($arVisita);
                 $em->flush();
+                if($imagen) {
+                    $partesArchivo = $this->general->desfragmentarArchivoBase64($imagen);
+                    $dataBinario = base64_decode($partesArchivo['base64']);
+                    $nombre = "visita/{$arVisita->getId()}.{$partesArchivo['extension']}";
+                    $backBlaze = new BackBlaze();
+                    $backBlaze->subirB64($nombre, $dataBinario, $partesArchivo['mimeType']);
+                    $arVisita->setUrlImagenIngreso("{$_ENV['B2_BUCKET_NAME']}/{$nombre}");
+                    $em->persist($arVisita);
+                    $em->flush();
+                }
+
                 //Usuarios a los que se debe notificar
                 if($arCelda) {
                     $firebase = new Firebase();
@@ -82,8 +91,8 @@ class VisitaRepository extends ServiceEntityRepository
                 return [
                     'error' => false,
                     'respuesta' => [
-                        'codigoVisita' => $arVisita->getId(),
-                        'codigoIngreso' => $codigo
+                        'id' => $arVisita->getId(),
+                        'codigo' => $codigo
                     ]
                 ];
             } else {
@@ -111,7 +120,7 @@ class VisitaRepository extends ServiceEntityRepository
             ->addSelect('v.placa')
             ->addSelect('v.estadoAutorizado')
             ->addSelect('v.codigoIngreso')
-            ->addSelect("CONCAT('{$_ENV['ALMACENAMIENTO_URL']}', v.urlImagenIngreso) as urlImagenIngreso")
+            ->addSelect("CONCAT('{$_ENV['B2_RUTA']}', v.urlImagenIngreso) as urlImagenIngreso")
             ->where("v.id = {$codigoVisita}");
         $arVisita = $queryBuilder->getQuery()->getOneOrNullResult();
         return [
@@ -134,7 +143,7 @@ class VisitaRepository extends ServiceEntityRepository
             ->addSelect('v.codigoIngreso')
             ->addSelect('v.estadoAutorizado')
             ->addSelect('v.estadoCerrado')
-            ->addSelect("CONCAT('{$_ENV['ALMACENAMIENTO_URL']}', v.urlImagenIngreso) as urlImagenIngreso")
+            ->addSelect("CONCAT('{$_ENV['B2_RUTA']}', v.urlImagenIngreso) as urlImagenIngreso")
             ->addSelect('c.celda')
             ->addSelect('c.celular')
             ->addSelect('c.correo')
